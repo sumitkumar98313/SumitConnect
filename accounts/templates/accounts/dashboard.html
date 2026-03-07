@@ -1,0 +1,80 @@
+{% extends 'accounts/base.html' %}
+{% block title %}Dashboard — SumitConnect{% endblock %}
+
+{% block content %}
+
+<h1 class="page-title">Dashboard</h1>
+<p class="page-subtitle">Welcome back, {{ user.username }}</p>
+
+<!-- Profile Summary -->
+<div class="card" style="display:flex; align-items:center; gap:24px; margin-bottom:24px; flex-wrap:wrap;">
+  {% if user.profile.profile_picture %}
+    <img src="{{ user.profile.profile_picture.url }}" class="avatar avatar-lg" />
+  {% else %}
+    <div class="avatar-placeholder avatar-lg" style="font-size:2.2rem;">
+      {{ user.username|first|upper }}
+    </div>
+  {% endif %}
+  <div style="flex:1;">
+    <div style="font-family:'Syne',sans-serif; font-weight:800; font-size:1.4rem;">{{ user.username }}</div>
+    <div class="text-muted" style="margin-top:6px;">
+      {% if user.profile.bio %}{{ user.profile.bio }}{% else %}<em>No bio yet</em>{% endif %}
+    </div>
+    <div style="margin-top:12px;">
+      <a href="{% url 'profile' %}" class="btn btn-secondary" style="font-size:0.85rem; padding:8px 16px;">Edit Profile</a>
+    </div>
+  </div>
+  <div style="text-align:right;">
+    <div class="text-muted" style="font-size:0.8rem; text-transform:uppercase; letter-spacing:0.5px;">Member since</div>
+    <div style="font-weight:600; margin-top:4px;">{{ user.date_joined|date:"M Y" }}</div>
+  </div>
+</div>
+
+<!-- Stats -->
+<div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:16px; margin-bottom:32px;">
+  <div class="card" style="text-align:center;">
+    <div style="font-size:2rem; font-family:'Syne',sans-serif; font-weight:800; color:var(--accent);">
+      {{ my_posts_count }}
+    </div>
+    <div class="text-muted" style="font-size:0.85rem; margin-top:4px;">Posts</div>
+  </div>
+  <div class="card" style="text-align:center;">
+    <div style="font-size:2rem; font-family:'Syne',sans-serif; font-weight:800; color:var(--accent);">
+      {{ followers_count }}
+    </div>
+    <div class="text-muted" style="font-size:0.85rem; margin-top:4px;">Followers</div>
+  </div>
+  <div class="card" style="text-align:center;">
+    <div style="font-size:2rem; font-family:'Syne',sans-serif; font-weight:800; color:var(--accent);">
+      {{ following_count }}
+    </div>
+    <div class="text-muted" style="font-size:0.85rem; margin-top:4px;">Following</div>
+  </div>
+</div>
+
+<!-- Recently Joined -->
+{% if recent_users %}
+<h2 style="font-family:'Syne',sans-serif; font-weight:700; margin-bottom:16px; font-size:1.1rem;">Recently Joined</h2>
+<div class="card" style="padding:0; overflow:hidden;">
+  {% for u in recent_users %}
+    <div style="display:flex; align-items:center; gap:14px; padding:16px 24px; {% if not forloop.last %}border-bottom:1px solid var(--border);{% endif %}">
+      {% if u.profile.profile_picture %}
+        <img src="{{ u.profile.profile_picture.url }}" class="avatar avatar-sm" />
+      {% else %}
+        <div class="avatar-placeholder avatar-sm" style="font-size:0.9rem;">{{ u.username|first|upper }}</div>
+      {% endif %}
+      <div style="flex:1;">
+        <a href="{% url 'user_profile' u.username %}" style="color:var(--text); text-decoration:none; font-weight:500;">
+          {{ u.username }}
+        </a>
+        {% if u.profile.bio %}
+          <div class="text-muted" style="font-size:0.82rem; margin-top:2px;">{{ u.profile.bio|truncatechars:60 }}</div>
+        {% endif %}
+      </div>
+      <div class="text-muted" style="font-size:0.8rem;">{{ u.date_joined|date:"d M" }}</div>
+    </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+{% endblock %}

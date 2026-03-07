@@ -1,0 +1,95 @@
+{% extends 'accounts/base.html' %}
+{% block title %}{{ viewed_user.username }} — SumitConnect{% endblock %}
+
+{% block content %}
+
+<a href="{% url 'users_list' %}" class="text-muted" style="text-decoration:none; font-size:0.9rem;">
+  ← Back to Users
+</a>
+
+<!-- Profile Header -->
+<div class="card" style="display:flex; align-items:center; gap:28px; margin-top:24px; margin-bottom:24px; flex-wrap:wrap;">
+  {% if viewed_user.profile.profile_picture %}
+    <img src="{{ viewed_user.profile.profile_picture.url }}" class="avatar avatar-lg" />
+  {% else %}
+    <div class="avatar-placeholder avatar-lg" style="font-size:2.5rem;">
+      {{ viewed_user.username|first|upper }}
+    </div>
+  {% endif %}
+
+  <div style="flex:1;">
+    <h1 style="font-family:'Syne',sans-serif; font-weight:800; font-size:1.8rem;">
+      {{ viewed_user.username }}
+    </h1>
+    <div class="text-muted" style="margin-top:6px; margin-bottom:16px;">
+      Joined {{ viewed_user.date_joined|date:"F Y" }}
+    </div>
+
+    <!-- Follower Stats -->
+    <div style="display:flex; gap:24px; margin-bottom:16px;">
+      <div>
+        <span style="font-weight:700; font-family:'Syne',sans-serif;">{{ followers_count }}</span>
+        <span class="text-muted" style="font-size:0.85rem; margin-left:4px;">Followers</span>
+      </div>
+      <div>
+        <span style="font-weight:700; font-family:'Syne',sans-serif;">{{ following_count }}</span>
+        <span class="text-muted" style="font-size:0.85rem; margin-left:4px;">Following</span>
+      </div>
+      <div>
+        <span style="font-weight:700; font-family:'Syne',sans-serif;">{{ user_posts.count }}</span>
+        <span class="text-muted" style="font-size:0.85rem; margin-left:4px;">Posts</span>
+      </div>
+    </div>
+
+    <!-- Follow Button -->
+    {% if viewed_user != request.user %}
+      <a href="{% url 'follow_user' viewed_user.username %}"
+         class="btn {% if is_following %}btn-secondary{% else %}btn-primary{% endif %}">
+        {% if is_following %}Unfollow{% else %}Follow{% endif %}
+      </a>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Bio -->
+{% if viewed_user.profile.bio %}
+  <div class="card" style="margin-bottom:24px;">
+    <h3 style="font-family:'Syne',sans-serif; font-weight:700; margin-bottom:12px;">About</h3>
+    <p style="line-height:1.7; color:var(--text);">{{ viewed_user.profile.bio }}</p>
+  </div>
+{% endif %}
+
+<!-- User Posts -->
+<h3 style="font-family:'Syne',sans-serif; font-weight:700; margin-bottom:16px;">
+  Posts by {{ viewed_user.username }}
+</h3>
+
+{% if user_posts %}
+  {% for post in user_posts %}
+    <div class="card" style="margin-bottom:16px;">
+      <div class="text-muted" style="font-size:0.8rem; margin-bottom:10px;">
+        {{ post.created_at|date:"d M Y, h:i A" }}
+      </div>
+      <p style="line-height:1.7; margin-bottom:12px;">{{ post.content }}</p>
+      {% if post.image %}
+        <img
+          src="{{ post.image.url }}"
+          style="width:100%; max-height:300px; object-fit:cover; border-radius:8px; margin-bottom:12px;"
+        />
+      {% endif %}
+      <div style="display:flex; gap:16px; padding-top:10px; border-top:1px solid var(--border);">
+        <span class="text-muted" style="font-size:0.85rem;">❤️ {{ post.likes_count }}</span>
+        <a href="{% url 'post_detail' post.id %}"
+           style="color:var(--muted); text-decoration:none; font-size:0.85rem;">
+          💬 {{ post.comments_count }} — View post
+        </a>
+      </div>
+    </div>
+  {% endfor %}
+{% else %}
+  <div class="card" style="text-align:center; padding:32px;">
+    <div class="text-muted" style="font-style:italic;">No posts yet.</div>
+  </div>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{% block title %}SumitConnect{% endblock %}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f0f0f;
+      --surface: #1a1a1a;
+      --border: #2a2a2a;
+      --accent: #c8f135;
+      --accent-dark: #a8d020;
+      --text: #f0f0f0;
+      --muted: #888;
+      --danger: #ff4d4d;
+      --radius: 12px;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-brand {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.3rem;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+
+    .nav-links { display: flex; align-items: center; gap: 8px; }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      padding: 8px 14px;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--text); background: var(--border); }
+    .nav-links a.active { color: var(--bg); background: var(--accent); font-weight: 600; }
+    .nav-links a.logout-btn { color: var(--danger); border: 1px solid #2a1a1a; }
+    .nav-links a.logout-btn:hover { background: #2a1a1a; }
+
+    .page-wrapper { max-width: 1000px; margin: 0 auto; padding: 48px 24px; }
+
+    .messages { list-style: none; margin-bottom: 24px; }
+    .messages li { padding: 12px 18px; border-radius: var(--radius); font-size: 0.9rem; margin-bottom: 8px; font-weight: 500; }
+    .messages .success { background: #1a2e0a; color: var(--accent); border: 1px solid #2a4a10; }
+    .messages .error   { background: #2e0a0a; color: #ff8080; border: 1px solid #4a1010; }
+    .messages .info    { background: #0a1a2e; color: #80b0ff; border: 1px solid #10304a; }
+
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; }
+
+    .page-title { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; margin-bottom: 8px; letter-spacing: -1px; }
+    .page-subtitle { color: var(--muted); margin-bottom: 32px; font-size: 0.95rem; }
+
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-size: 0.85rem; font-weight: 500; color: var(--muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .form-group input, .form-group textarea { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.95rem; transition: border-color 0.2s; outline: none; }
+    .form-group input:focus, .form-group textarea:focus { border-color: var(--accent); }
+    .form-group textarea { resize: vertical; min-height: 100px; }
+
+    .btn { display: inline-block; padding: 11px 24px; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 600; cursor: pointer; border: none; text-decoration: none; transition: all 0.2s; }
+    .btn-primary { background: var(--accent); color: var(--bg); }
+    .btn-primary:hover { background: var(--accent-dark); }
+    .btn-secondary { background: transparent; color: var(--text); border: 1px solid var(--border); }
+    .btn-secondary:hover { background: var(--border); }
+    .btn-danger { background: transparent; color: var(--danger); border: 1px solid #2a1a1a; }
+    .btn-danger:hover { background: #2a1a1a; }
+
+    .avatar { border-radius: 50%; object-fit: cover; border: 2px solid var(--border); }
+    .avatar-lg { width: 100px; height: 100px; }
+    .avatar-md { width: 56px;  height: 56px; }
+    .avatar-sm { width: 36px;  height: 36px; }
+
+    .avatar-placeholder { border-radius: 50%; background: var(--border); display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 700; color: var(--muted); flex-shrink: 0; }
+
+    hr { border: none; border-top: 1px solid var(--border); margin: 28px 0; }
+    .text-muted  { color: var(--muted); font-size: 0.9rem; }
+    .text-accent { color: var(--accent); }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="{% url 'home' %}" class="nav-brand">SumitConnect</a>
+    <div class="nav-links">
+      {% if user.is_authenticated %}
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'feed' %}">Feed</a>
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+        <a href="{% url 'profile' %}">Profile</a>
+        <a href="{% url 'users_list' %}">Users</a>
+        <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+      {% else %}
+        <a href="{% url 'login' %}">Login</a>
+        <a href="{% url 'signup' %}" class="active">Sign Up</a>
+      {% endif %}
+    </div>
+  </nav>
+
+  <div class="page-wrapper">
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </div>
+
+</body>
+</html>

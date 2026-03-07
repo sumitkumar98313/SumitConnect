@@ -1,0 +1,31 @@
+{% extends 'accounts/base.html' %}
+{% block title %}Delete Account — DevConnect{% endblock %}
+
+{% block content %}
+
+<div style="max-width:420px; margin:0 auto;">
+  <a href="{% url 'profile' %}" class="text-muted" style="text-decoration:none; font-size:0.9rem;">← Back to Profile</a>
+
+  <h1 class="page-title" style="margin-top:20px; color:var(--danger);">Delete Account</h1>
+  <p class="page-subtitle">This action is permanent and cannot be undone</p>
+
+  <div class="card" style="border-color:#2a1a1a;">
+    <div style="background:#2e0a0a; border:1px solid #4a1010; border-radius:8px; padding:14px 18px; margin-bottom:24px;">
+      <strong style="color:#ff8080;">⚠ Warning:</strong>
+      <span class="text-muted" style="font-size:0.9rem; margin-left:6px;">All your data including profile, bio, and picture will be permanently deleted.</span>
+    </div>
+    <form method="POST">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="password">Confirm with your password</label>
+        <input type="password" id="password" name="password" placeholder="Enter your password to confirm" required />
+      </div>
+      <div style="display:flex; gap:12px;">
+        <button type="submit" class="btn btn-danger" style="flex:1;">Yes, Delete My Account</button>
+        <a href="{% url 'profile' %}" class="btn btn-secondary" style="flex:1; text-align:center;">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}
