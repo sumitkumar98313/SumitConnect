@@ -1,48 +1,104 @@
 {% extends 'accounts/base.html' %}
-{% block title %}Profile — DevConnect{% endblock %}
+{% block title %}Profile — SumitConnect{% endblock %}
 
 {% block content %}
 
 <h1 class="page-title">Your Profile</h1>
 <p class="page-subtitle">Manage your account information</p>
 
-<div style="display:grid; grid-template-columns:1fr 2fr; gap:24px; align-items:start;">
+<style>
+  .profile-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 24px;
+    align-items: start;
+  }
+  @media (max-width: 640px) {
+    .profile-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<div class="profile-grid">
 
   <div class="card" style="text-align:center;">
     {% if user.profile.profile_picture %}
-      <img src="{{ user.profile.profile_picture.url }}" class="avatar avatar-lg" style="margin-bottom:16px;" />
+      <img src="{{ user.profile.profile_picture.url }}" class="avatar avatar-lg" alt="{{ user.username }}" style="margin-bottom:16px;" />
     {% else %}
       <div class="avatar-placeholder avatar-lg" style="font-size:2.5rem; margin:0 auto 16px;">
         {{ user.username|first|upper }}
       </div>
     {% endif %}
+
     <div style="font-family:'Syne',sans-serif; font-weight:700; font-size:1.1rem;">{{ user.username }}</div>
     <div class="text-muted" style="font-size:0.85rem; margin-top:6px;">Joined {{ user.date_joined|date:"F Y" }}</div>
+
     <hr />
+
     <a href="{% url 'change_password' %}" class="btn btn-secondary" style="width:100%; margin-bottom:10px; display:block; text-align:center;">Change Password</a>
     <a href="{% url 'delete_account' %}" class="btn btn-danger" style="width:100%; display:block; text-align:center;">Delete Account</a>
   </div>
 
   <div class="card">
     <h3 style="font-family:'Syne',sans-serif; font-weight:700; margin-bottom:24px;">Edit Profile</h3>
-    <form method="POST" enctype="multipart/form-data">
+
+    <form method="POST" enctype="multipart/form-data" novalidate>
       {% csrf_token %}
+
       <div class="form-group">
-        <label>Bio</label>
-        <textarea name="bio" placeholder="Tell others about yourself...">{{ user.profile.bio }}</textarea>
+        <label for="bio">Bio</label>
+        <textarea id="bio" name="bio" placeholder="Tell others about yourself..." maxlength="200">{{ user.profile.bio }}</textarea>
+        <div style="text-align:right; font-size:0.78rem; color:var(--muted); margin-top:4px;">
+          <span id="bioCharCount">{{ user.profile.bio|length }}</span>/200
+        </div>
       </div>
+
       <div class="form-group">
-        <label>Profile Picture</label>
-        <input type="file" name="profile_picture" accept="image/*"
+        <label for="profile_picture">Profile Picture</label>
+        <input type="file" id="profile_picture" name="profile_picture" accept="image/*"
                style="color:var(--muted); padding:10px 0; border:none; background:transparent;" />
         {% if user.profile.profile_picture %}
           <div class="text-muted" style="font-size:0.8rem; margin-top:6px;">Current photo will be replaced if you select a new one</div>
         {% endif %}
+        <div id="previewBox" style="display:none; margin-top:12px;">
+          <div class="text-muted" style="font-size:0.8rem; margin-bottom:6px;">Preview:</div>
+          <img id="imagePreview" src="" alt="preview" style="width:80px; height:80px; border-radius:50%; object-fit:cover; border:2px solid var(--accent);" />
+        </div>
       </div>
+
       <button type="submit" class="btn btn-primary">Save Changes</button>
     </form>
   </div>
 
 </div>
+
+<script>
+  const bioTextarea = document.getElementById('bio');
+  const bioCharCount = document.getElementById('bioCharCount');
+
+  bioTextarea.addEventListener('input', function() {
+    const len = this.value.length;
+    bioCharCount.textContent = len;
+    bioCharCount.style.color = len >= 180 ? '#ff6b6b' : 'var(--muted)';
+  });
+
+  const picInput = document.getElementById('profile_picture');
+  const previewBox = document.getElementById('previewBox');
+  const previewImg = document.getElementById('imagePreview');
+
+  picInput.addEventListener('change', function() {
+    const file = this.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        previewImg.src = e.target.result;
+        previewBox.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    } else {
+      previewBox.style.display = 'none';
+      previewImg.src = '';
+    }
+  });
+</script>
 
 {% endblock %}

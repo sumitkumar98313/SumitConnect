@@ -1,25 +1,8 @@
-# Database
-db.sqlite3
-
-# Python
-__pycache__/
-*.py[cod]
-*.pyo
-*.pyd
-.Python
+﻿__pycache__/
 *.pyc
-
-# Environment
-.env
-venv/
-env/
-
-# Media files (user uploads)
+*.pyo
+db.sqlite3
 media/
-
-# VS Code
+.env
+staticfiles/
 .vscode/
-
-# Windows
-Thumbs.db
-Desktop.ini

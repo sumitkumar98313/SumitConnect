@@ -6,90 +6,76 @@
 <h1 class="page-title">Feed</h1>
 <p class="page-subtitle">See what everyone is sharing</p>
 
-<!-- Create Post Box -->
 <div class="card" style="margin-bottom:24px;">
-  <form method="POST" action="{% url 'create_post' %}" enctype="multipart/form-data">
+  <form method="POST" action="{% url 'create_post' %}" enctype="multipart/form-data" novalidate>
     {% csrf_token %}
     <div class="form-group">
-      <textarea
-        name="content"
-        placeholder="What's on your mind, {{ request.user.username }}?"
-        style="min-height:80px; font-size:1rem;"
-      ></textarea>
+      <textarea name="content" id="postContent" placeholder="What's on your mind, {{ request.user.username }}?"
+                style="min-height:80px; font-size:1rem;" required maxlength="500"></textarea>
+      <div style="text-align:right; font-size:0.78rem; color:var(--muted); margin-top:4px;">
+        <span id="charCount">0</span>/500
+      </div>
     </div>
+
+    <div id="imagePreviewBox" style="display:none; margin-bottom:12px;">
+      <img id="imagePreview" src="" alt="preview" style="max-width:100%; max-height:200px; border-radius:8px; object-fit:cover;" />
+    </div>
+
     <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
-      <input
-        type="file"
-        name="image"
-        accept="image/*"
-        style="color:var(--muted); font-size:0.85rem;"
-      />
+      <input type="file" name="image" id="imageInput" accept="image/*" style="color:var(--muted); font-size:0.85rem;" />
       <button type="submit" class="btn btn-primary">Post →</button>
     </div>
   </form>
 </div>
 
-<!-- Posts Feed -->
 {% if posts %}
   {% for post in posts %}
     <div class="card" style="margin-bottom:20px;">
 
-      <!-- Post Header -->
       <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
         {% if post.author.profile.profile_picture %}
-          <img src="{{ post.author.profile.profile_picture.url }}" class="avatar avatar-sm" />
+          <img src="{{ post.author.profile.profile_picture.url }}" class="avatar avatar-sm" alt="{{ post.author.username }}" />
         {% else %}
           <div class="avatar-placeholder avatar-sm" style="font-size:0.85rem;">
             {{ post.author.username|first|upper }}
           </div>
         {% endif %}
         <div style="flex:1;">
-          <a href="{% url 'user_profile' post.author.username %}"
-             style="color:var(--text); text-decoration:none; font-weight:600;">
+          <a href="{% url 'user_profile' post.author.username %}" style="color:var(--text); text-decoration:none; font-weight:600;">
             {{ post.author.username }}
           </a>
-          <div class="text-muted" style="font-size:0.8rem;">
-            {{ post.created_at|date:"d M Y, h:i A" }}
-          </div>
+          <div class="text-muted" style="font-size:0.8rem;">{{ post.created_at|date:"d M Y, h:i A" }}</div>
         </div>
         {% if post.author == request.user %}
-          <a href="{% url 'delete_post' post.id %}"
-             onclick="return confirm('Delete this post?')"
-             style="color:var(--danger); font-size:0.85rem; text-decoration:none;">
-            Delete
-          </a>
+          <form method="POST" action="{% url 'delete_post' post.id %}" onsubmit="return confirm('Delete this post?')" style="margin:0;">
+            {% csrf_token %}
+            <button type="submit" style="background:none; border:none; color:var(--danger); font-size:0.85rem; cursor:pointer; font-family:'DM Sans',sans-serif; padding:0;">
+              Delete
+            </button>
+          </form>
         {% endif %}
       </div>
 
-      <!-- Post Content -->
       <p style="line-height:1.7; margin-bottom:16px;">{{ post.content }}</p>
 
-      <!-- Post Image -->
       {% if post.image %}
-        <img
-          src="{{ post.image.url }}"
-          style="width:100%; max-height:400px; object-fit:cover; border-radius:8px; margin-bottom:16px;"
-        />
+        <img src="{{ post.image.url }}" alt="post image" style="width:100%; max-height:400px; object-fit:cover; border-radius:8px; margin-bottom:16px;" />
       {% endif %}
 
-      <!-- Post Actions -->
       <div style="display:flex; align-items:center; gap:20px; padding-top:12px; border-top:1px solid var(--border);">
-
-        <!-- Like Button -->
-        <a href="{% url 'like_post' post.id %}?next=feed"
-           style="text-decoration:none; display:flex; align-items:center; gap:6px;
-                  color:{% if post.liked_by_user %}#ff6b6b{% else %}var(--muted){% endif %}; font-size:0.9rem;">
-          {% if post.liked_by_user %}❤️{% else %}🤍{% endif %}
-          {{ post.likes_count }} Like{{ post.likes_count|pluralize }}
-        </a>
-
-        <!-- Comment Button -->
-        <a href="{% url 'post_detail' post.id %}"
-           style="text-decoration:none; color:var(--muted); font-size:0.9rem; display:flex; align-items:center; gap:6px;">
+        <form method="POST" action="{% url 'like_post' post.id %}" style="margin:0;">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="feed" />
+          <button type="submit" style="background:none; border:none; cursor:pointer; display:flex; align-items:center; gap:6px; font-family:'DM Sans',sans-serif; font-size:0.9rem; padding:0; color:{% if post.liked_by_user %}#ff6b6b{% else %}var(--muted){% endif %};">
+            {% if post.liked_by_user %}❤️{% else %}🤍{% endif %}
+            {{ post.likes_count }} Like{{ post.likes_count|pluralize }}
+          </button>
+        </form>
+        <a href="{% url 'post_detail' post.id %}" style="text-decoration:none; color:var(--muted); font-size:0.9rem; display:flex; align-items:center; gap:6px;">
           💬 {{ post.comments_count }} Comment{{ post.comments_count|pluralize }}
         </a>
-
       </div>
+
     </div>
   {% endfor %}
 
@@ -100,5 +86,35 @@
     <div class="text-muted">Be the first one to post something!</div>
   </div>
 {% endif %}
+
+<script>
+  const textarea = document.getElementById('postContent');
+  const charCount = document.getElementById('charCount');
+
+  textarea.addEventListener('input', function() {
+    const len = this.value.length;
+    charCount.textContent = len;
+    charCount.style.color = len >= 450 ? '#ff6b6b' : 'var(--muted)';
+  });
+
+  const imageInput = document.getElementById('imageInput');
+  const imagePreviewBox = document.getElementById('imagePreviewBox');
+  const imagePreview = document.getElementById('imagePreview');
+
+  imageInput.addEventListener('change', function() {
+    const file = this.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        imagePreview.src = e.target.result;
+        imagePreviewBox.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    } else {
+      imagePreviewBox.style.display = 'none';
+      imagePreview.src = '';
+    }
+  });
+</script>
 
 {% endblock %}

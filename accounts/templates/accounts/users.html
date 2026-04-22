@@ -1,51 +1,86 @@
 {% extends 'accounts/base.html' %}
-{% block title %}Users — DevConnect{% endblock %}
+{% block title %}Users — SumitConnect{% endblock %}
 
 {% block content %}
 
 <h1 class="page-title">Explore Users</h1>
 <p class="page-subtitle">Find and connect with other developers</p>
 
-<form method="GET" style="margin-bottom:32px; display:flex; gap:12px;">
-  <input type="text" name="search" placeholder="Search by username..." value="{{ query }}"
-    style="flex:1; background:var(--surface); border:1px solid var(--border); border-radius:8px;
-           padding:12px 16px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:0.95rem; outline:none;"
-    onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'" />
+<style>
+  .user-card-link { text-decoration:none; display:block; }
+  .user-card-link:hover .user-card { border-color:var(--accent); transform:translateY(-2px); }
+  .user-card { transition:border-color 0.2s, transform 0.2s; height:100%; }
+  .search-input {
+    flex:1;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:12px 16px;
+    color:var(--text);
+    font-family:'DM Sans',sans-serif;
+    font-size:0.95rem;
+    outline:none;
+    transition:border-color 0.2s;
+  }
+  .search-input:focus { border-color:var(--accent); }
+</style>
+
+<form method="GET" style="margin-bottom:24px; display:flex; gap:12px; flex-wrap:wrap;">
+  <input type="text" name="search" placeholder="Search by username..." value="{{ query }}" class="search-input" autocomplete="off" />
   <button type="submit" class="btn btn-primary">Search</button>
   {% if query %}<a href="{% url 'users_list' %}" class="btn btn-secondary">Clear</a>{% endif %}
 </form>
 
 {% if query %}
-  <p class="text-muted" style="margin-bottom:20px;">Results for "<span style="color:var(--accent);">{{ query }}</span>"</p>
+  <p class="text-muted" style="margin-bottom:20px;">
+    {% with users|length as count %}
+      {% if count > 0 %}
+        <span style="color:var(--accent);">{{ count }}</span> result{{ count|pluralize }} for
+      {% else %}
+        No results for
+      {% endif %}
+    {% endwith %}
+    "<span style="color:var(--accent);">{{ query }}</span>"
+  </p>
 {% endif %}
 
 {% if users %}
   <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(240px,1fr)); gap:16px;">
     {% for u in users %}
-      <a href="{% url 'user_profile' u.username %}" style="text-decoration:none;">
-        <div class="card" style="display:flex; flex-direction:column; align-items:center; text-align:center; transition:border-color 0.2s;"
-             onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
-          {% if u.profile.profile_picture %}
-            <img src="{{ u.profile.profile_picture.url }}" class="avatar avatar-md" style="margin-bottom:14px;" />
-          {% else %}
-            <div class="avatar-placeholder avatar-md" style="font-size:1.3rem; margin-bottom:14px;">{{ u.username|first|upper }}</div>
-          {% endif %}
-          <div style="font-family:'Syne',sans-serif; font-weight:700; color:var(--text);">{{ u.username }}</div>
-          {% if u.profile.bio %}
-            <div class="text-muted" style="font-size:0.85rem; margin-top:8px; line-height:1.5;">{{ u.profile.bio|truncatechars:80 }}</div>
-          {% else %}
-            <div class="text-muted" style="font-size:0.85rem; margin-top:8px; font-style:italic;">No bio yet</div>
-          {% endif %}
-          <div class="text-muted" style="font-size:0.78rem; margin-top:12px;">Joined {{ u.date_joined|date:"M Y" }}</div>
-        </div>
-      </a>
+      {% if u != request.user %}
+        <a href="{% url 'user_profile' u.username %}" class="user-card-link">
+          <div class="card user-card" style="display:flex; flex-direction:column; align-items:center; text-align:center;">
+            {% if u.profile.profile_picture %}
+              <img src="{{ u.profile.profile_picture.url }}" class="avatar avatar-md" alt="{{ u.username }}" style="margin-bottom:14px;" />
+            {% else %}
+              <div class="avatar-placeholder avatar-md" style="font-size:1.3rem; margin-bottom:14px;">
+                {{ u.username|first|upper }}
+              </div>
+            {% endif %}
+            <div style="font-family:'Syne',sans-serif; font-weight:700; color:var(--text);">{{ u.username }}</div>
+            {% if u.profile.bio %}
+              <div class="text-muted" style="font-size:0.85rem; margin-top:8px; line-height:1.5;">{{ u.profile.bio|truncatechars:80 }}</div>
+            {% else %}
+              <div class="text-muted" style="font-size:0.85rem; margin-top:8px; font-style:italic;">No bio yet</div>
+            {% endif %}
+            <div class="text-muted" style="font-size:0.78rem; margin-top:12px;">Joined {{ u.date_joined|date:"M Y" }}</div>
+          </div>
+        </a>
+      {% endif %}
     {% endfor %}
   </div>
+
 {% else %}
   <div class="card" style="text-align:center; padding:48px;">
-    <div style="font-size:2.5rem; margin-bottom:16px;">🔍</div>
-    <div style="font-family:'Syne',sans-serif; font-weight:700; margin-bottom:8px;">No users found</div>
-    <div class="text-muted">Try a different search term</div>
+    {% if query %}
+      <div style="font-size:2.5rem; margin-bottom:16px;">🔍</div>
+      <div style="font-family:'Syne',sans-serif; font-weight:700; margin-bottom:8px;">No users found</div>
+      <div class="text-muted">Nothing matched "<span style="color:var(--accent);">{{ query }}</span>". Try something else.</div>
+    {% else %}
+      <div style="font-size:2.5rem; margin-bottom:16px;">👥</div>
+      <div style="font-family:'Syne',sans-serif; font-weight:700; margin-bottom:8px;">No users yet</div>
+      <div class="text-muted">Looks like you're the first one here!</div>
+    {% endif %}
   </div>
 {% endif %}
 

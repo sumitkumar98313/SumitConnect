@@ -1,69 +1,105 @@
 {% extends 'accounts/base.html' %}
-{% block title %}Sign Up — DevConnect{% endblock %}
+{% block title %}Sign Up — SumitConnect{% endblock %}
 
 {% block content %}
 
 <div style="max-width:420px; margin:0 auto;">
-
   <h1 class="page-title">Create Account</h1>
-  <p class="page-subtitle">Join the DevConnect community</p>
+  <p class="page-subtitle">Join the SumitConnect community</p>
 
   <div class="card">
-    <form method="POST">
+    <form method="POST" novalidate id="signupForm">
       {% csrf_token %}
 
       <div class="form-group">
         <label for="username">Username</label>
-        <input
-          type="text"
-          id="username"
-          name="username"
-          placeholder="Choose a username"
-          required
-          autofocus
-        />
+        <input type="text" id="username" name="username" placeholder="Letters, numbers, underscores only"
+               value="{{ request.POST.username }}" autocomplete="username" required autofocus />
+        <div style="font-size:0.78rem; color:var(--muted); margin-top:5px;">Only letters, numbers and underscores. No spaces.</div>
       </div>
 
       <div class="form-group">
         <label for="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          placeholder="Min. 6 characters"
-          required
-        />
+        <div style="position:relative;">
+          <input type="password" id="password" name="password" placeholder="Min. 6 characters"
+                 autocomplete="new-password" minlength="6" required style="padding-right:48px;" />
+          <button type="button" id="togglePassword" aria-label="Toggle password visibility"
+                  style="position:absolute; right:14px; top:50%; transform:translateY(-50%);
+                         background:none; border:none; cursor:pointer; font-size:1rem;
+                         color:var(--muted); padding:0; line-height:1;">👁</button>
+        </div>
       </div>
 
       <div class="form-group">
         <label for="confirm_password">Confirm Password</label>
-        <input
-          type="password"
-          id="confirm_password"
-          name="confirm_password"
-          placeholder="Repeat your password"
-          required
-        />
+        <div style="position:relative;">
+          <input type="password" id="confirm_password" name="confirm_password" placeholder="Repeat your password"
+                 autocomplete="new-password" required style="padding-right:48px;" />
+          <button type="button" id="toggleConfirm" aria-label="Toggle confirm password visibility"
+                  style="position:absolute; right:14px; top:50%; transform:translateY(-50%);
+                         background:none; border:none; cursor:pointer; font-size:1rem;
+                         color:var(--muted); padding:0; line-height:1;">👁</button>
+        </div>
+        <div id="matchMsg" style="font-size:0.78rem; margin-top:5px; display:none;"></div>
       </div>
 
-      <button
-        type="submit"
-        class="btn btn-primary"
-        style="width:100%; margin-top:12px; padding:14px; font-size:1rem;">
-        Create New User
+      <button type="submit" id="submitBtn" class="btn btn-primary" style="width:100%; margin-top:12px; padding:14px; font-size:1rem;">
+        Create Account
       </button>
-
     </form>
   </div>
 
   <p class="text-muted" style="text-align:center; margin-top:20px;">
     Already have an account?
-    <a href="{% url 'login' %}"
-       style="color:var(--accent); text-decoration:none; font-weight:500;">
-      Login here
-    </a>
+    <a href="{% url 'login' %}" style="color:var(--accent); text-decoration:none; font-weight:500;">Login here</a>
   </p>
-
 </div>
+
+<script>
+  const passwordInput = document.getElementById('password');
+  const confirmInput = document.getElementById('confirm_password');
+  const matchMsg = document.getElementById('matchMsg');
+
+  function makeToggle(btnId, inputId) {
+    const btn = document.getElementById(btnId);
+    const input = document.getElementById(inputId);
+    btn.addEventListener('click', function() {
+      const isPass = input.type === 'password';
+      input.type = isPass ? 'text' : 'password';
+      btn.textContent = isPass ? '🙈' : '👁';
+    });
+  }
+
+  makeToggle('togglePassword', 'password');
+  makeToggle('toggleConfirm', 'confirm_password');
+
+  function checkMatch() {
+    if (confirmInput.value.length === 0) {
+      matchMsg.style.display = 'none';
+      return;
+    }
+    matchMsg.style.display = 'block';
+    if (passwordInput.value === confirmInput.value) {
+      matchMsg.textContent = '✅ Passwords match';
+      matchMsg.style.color = '#c8f135';
+    } else {
+      matchMsg.textContent = '❌ Passwords do not match';
+      matchMsg.style.color = '#ff6b6b';
+    }
+  }
+
+  passwordInput.addEventListener('input', checkMatch);
+  confirmInput.addEventListener('input', checkMatch);
+
+  document.getElementById('signupForm').addEventListener('submit', function(e) {
+    if (passwordInput.value !== confirmInput.value) {
+      e.preventDefault();
+      matchMsg.style.display = 'block';
+      matchMsg.textContent = '❌ Passwords do not match';
+      matchMsg.style.color = '#ff6b6b';
+      confirmInput.focus();
+    }
+  });
+</script>
 
 {% endblock %}

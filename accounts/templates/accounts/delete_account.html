@@ -1,5 +1,5 @@
 {% extends 'accounts/base.html' %}
-{% block title %}Delete Account — DevConnect{% endblock %}
+{% block title %}Delete Account — SumitConnect{% endblock %}
 
 {% block content %}
 
@@ -11,21 +11,59 @@
 
   <div class="card" style="border-color:#2a1a1a;">
     <div style="background:#2e0a0a; border:1px solid #4a1010; border-radius:8px; padding:14px 18px; margin-bottom:24px;">
-      <strong style="color:#ff8080;">⚠ Warning:</strong>
-      <span class="text-muted" style="font-size:0.9rem; margin-left:6px;">All your data including profile, bio, and picture will be permanently deleted.</span>
+      <strong style="color:#ff8080;">⚠ Warning</strong>
+      <ul style="color:#aaa; font-size:0.88rem; margin-top:10px; padding-left:18px; line-height:1.8;">
+        <li>Your profile, bio, and profile picture</li>
+        <li>All your posts and content</li>
+        <li>All followers and following connections</li>
+        <li>Your account login and personal data</li>
+      </ul>
     </div>
-    <form method="POST">
+
+    <form method="POST" novalidate id="deleteForm">
       {% csrf_token %}
+
       <div class="form-group">
         <label for="password">Confirm with your password</label>
         <input type="password" id="password" name="password" placeholder="Enter your password to confirm" required />
       </div>
+
+      <div style="display:flex; align-items:flex-start; gap:10px; margin-bottom:24px; background:#1a1a1a; border:1px solid #2a2a2a; border-radius:8px; padding:14px;">
+        <input type="checkbox" id="confirmCheck" style="margin-top:3px; accent-color:var(--danger); width:16px; height:16px; cursor:pointer; flex-shrink:0;" />
+        <label for="confirmCheck" style="font-size:0.88rem; color:#aaa; cursor:pointer; line-height:1.5;">
+          I understand this is permanent and I want to delete my account.
+        </label>
+      </div>
+
       <div style="display:flex; gap:12px;">
-        <button type="submit" class="btn btn-danger" style="flex:1;">Yes, Delete My Account</button>
+        <button type="submit" id="deleteBtn" disabled
+                style="flex:1; background:#c0392b; color:#fff; border:none; padding:11px 24px;
+                       border-radius:8px; font-size:0.9rem; font-weight:600; cursor:not-allowed;
+                       opacity:0.5; transition:all 0.2s; font-family:'DM Sans',sans-serif;">
+          Yes, Delete My Account
+        </button>
         <a href="{% url 'profile' %}" class="btn btn-secondary" style="flex:1; text-align:center;">Cancel</a>
       </div>
     </form>
   </div>
 </div>
+
+<script>
+  const checkbox = document.getElementById('confirmCheck');
+  const deleteBtn = document.getElementById('deleteBtn');
+  const deleteForm = document.getElementById('deleteForm');
+
+  checkbox.addEventListener('change', function() {
+    deleteBtn.disabled = !this.checked;
+    deleteBtn.style.opacity = this.checked ? '1' : '0.5';
+    deleteBtn.style.cursor = this.checked ? 'pointer' : 'not-allowed';
+  });
+
+  deleteForm.addEventListener('submit', function() {
+    deleteBtn.disabled = true;
+    deleteBtn.style.opacity = '0.5';
+    deleteBtn.textContent = 'Deleting...';
+  });
+</script>
 
 {% endblock %}

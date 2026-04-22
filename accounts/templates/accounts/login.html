@@ -1,23 +1,37 @@
 {% extends 'accounts/base.html' %}
-{% block title %}Login — DevConnect{% endblock %}
+{% block title %}Login — SumitConnect{% endblock %}
 
 {% block content %}
 
 <div style="max-width:420px; margin:0 auto;">
   <h1 class="page-title">Welcome back</h1>
-  <p class="page-subtitle">Log in to your DevConnect account</p>
+  <p class="page-subtitle">Log in to your SumitConnect account</p>
 
   <div class="card">
-    <form method="POST">
+    <form method="POST" novalidate>
       {% csrf_token %}
+
       <div class="form-group">
         <label for="username">Username</label>
-        <input type="text" id="username" name="username" placeholder="Enter your username" required autofocus />
+        <input type="text" id="username" name="username" placeholder="Enter your username"
+               value="{{ request.POST.username }}" autocomplete="username" required autofocus />
       </div>
+
       <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" placeholder="Enter your password" required />
+        <label for="password" style="display:flex; justify-content:space-between; align-items:center;">
+          <span>Password</span>
+          <a href="{% url 'password_reset' %}" style="color:var(--accent); font-size:0.82rem; text-decoration:none; font-weight:500;">Forgot password?</a>
+        </label>
+        <div style="position:relative;">
+          <input type="password" id="password" name="password" placeholder="Enter your password"
+                 autocomplete="current-password" required style="padding-right:48px;" />
+          <button type="button" id="togglePassword" aria-label="Toggle password visibility"
+                  style="position:absolute; right:14px; top:50%; transform:translateY(-50%);
+                         background:none; border:none; cursor:pointer; font-size:1rem;
+                         color:var(--muted); padding:0; line-height:1;">👁</button>
+        </div>
       </div>
+
       <button type="submit" class="btn btn-primary" style="width:100%; margin-top:8px;">Login →</button>
     </form>
   </div>
@@ -27,5 +41,16 @@
     <a href="{% url 'signup' %}" style="color:var(--accent); text-decoration:none; font-weight:500;">Sign up here</a>
   </p>
 </div>
+
+<script>
+  const toggleBtn = document.getElementById('togglePassword');
+  const passwordInput = document.getElementById('password');
+
+  toggleBtn.addEventListener('click', function() {
+    const isPassword = passwordInput.type === 'password';
+    passwordInput.type = isPassword ? 'text' : 'password';
+    toggleBtn.textContent = isPassword ? '🙈' : '👁';
+  });
+</script>
 
 {% endblock %}

@@ -38,6 +38,8 @@
       position: sticky;
       top: 0;
       z-index: 100;
+      flex-wrap: wrap;
+      gap: 8px;
     }
 
     .nav-brand {
@@ -49,7 +51,7 @@
       letter-spacing: -0.5px;
     }
 
-    .nav-links { display: flex; align-items: center; gap: 8px; }
+    .nav-links { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 
     .nav-links a {
       color: var(--muted);
@@ -63,16 +65,29 @@
 
     .nav-links a:hover { color: var(--text); background: var(--border); }
     .nav-links a.active { color: var(--bg); background: var(--accent); font-weight: 600; }
-    .nav-links a.logout-btn { color: var(--danger); border: 1px solid #2a1a1a; }
-    .nav-links a.logout-btn:hover { background: #2a1a1a; }
+
+    .nav-links form { margin: 0; }
+    .nav-links form button {
+      color: var(--danger);
+      background: none;
+      border: 1px solid #2a1a1a;
+      font-size: 0.9rem;
+      font-weight: 500;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.2s;
+    }
+    .nav-links form button:hover { background: #2a1a1a; }
 
     .page-wrapper { max-width: 1000px; margin: 0 auto; padding: 48px 24px; }
 
     .messages { list-style: none; margin-bottom: 24px; }
     .messages li { padding: 12px 18px; border-radius: var(--radius); font-size: 0.9rem; margin-bottom: 8px; font-weight: 500; }
     .messages .success { background: #1a2e0a; color: var(--accent); border: 1px solid #2a4a10; }
-    .messages .error   { background: #2e0a0a; color: #ff8080; border: 1px solid #4a1010; }
-    .messages .info    { background: #0a1a2e; color: #80b0ff; border: 1px solid #10304a; }
+    .messages .error { background: #2e0a0a; color: #ff8080; border: 1px solid #4a1010; }
+    .messages .info { background: #0a1a2e; color: #80b0ff; border: 1px solid #10304a; }
 
     .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; }
 
@@ -90,19 +105,27 @@
     .btn-primary:hover { background: var(--accent-dark); }
     .btn-secondary { background: transparent; color: var(--text); border: 1px solid var(--border); }
     .btn-secondary:hover { background: var(--border); }
-    .btn-danger { background: transparent; color: var(--danger); border: 1px solid #2a1a1a; }
-    .btn-danger:hover { background: #2a1a1a; }
+    .btn-danger { background: #c0392b; color: #fff; border: none; }
+    .btn-danger:hover { background: #a93226; }
 
     .avatar { border-radius: 50%; object-fit: cover; border: 2px solid var(--border); }
     .avatar-lg { width: 100px; height: 100px; }
-    .avatar-md { width: 56px;  height: 56px; }
-    .avatar-sm { width: 36px;  height: 36px; }
+    .avatar-md { width: 56px; height: 56px; }
+    .avatar-sm { width: 36px; height: 36px; }
 
     .avatar-placeholder { border-radius: 50%; background: var(--border); display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 700; color: var(--muted); flex-shrink: 0; }
 
     hr { border: none; border-top: 1px solid var(--border); margin: 28px 0; }
-    .text-muted  { color: var(--muted); font-size: 0.9rem; }
+    .text-muted { color: var(--muted); font-size: 0.9rem; }
     .text-accent { color: var(--accent); }
+
+    @media (max-width: 600px) {
+      nav { padding: 12px 16px; height: auto; }
+      .nav-links a { padding: 6px 10px; font-size: 0.8rem; }
+      .page-wrapper { padding: 28px 16px; }
+      .page-title { font-size: 1.5rem; }
+      .card { padding: 20px; }
+    }
   </style>
 </head>
 <body>
@@ -111,15 +134,18 @@
     <a href="{% url 'home' %}" class="nav-brand">SumitConnect</a>
     <div class="nav-links">
       {% if user.is_authenticated %}
-        <a href="{% url 'home' %}">Home</a>
-        <a href="{% url 'feed' %}">Feed</a>
-        <a href="{% url 'dashboard' %}">Dashboard</a>
-        <a href="{% url 'profile' %}">Profile</a>
-        <a href="{% url 'users_list' %}">Users</a>
-        <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+        <a href="{% url 'home' %}" {% if request.resolver_match.url_name == 'home' %}class="active"{% endif %}>Home</a>
+        <a href="{% url 'feed' %}" {% if request.resolver_match.url_name == 'feed' %}class="active"{% endif %}>Feed</a>
+        <a href="{% url 'dashboard' %}" {% if request.resolver_match.url_name == 'dashboard' %}class="active"{% endif %}>Dashboard</a>
+        <a href="{% url 'profile' %}" {% if request.resolver_match.url_name == 'profile' %}class="active"{% endif %}>Profile</a>
+        <a href="{% url 'users_list' %}" {% if request.resolver_match.url_name == 'users_list' %}class="active"{% endif %}>Users</a>
+        <form method="POST" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button type="submit">Logout</button>
+        </form>
       {% else %}
-        <a href="{% url 'login' %}">Login</a>
-        <a href="{% url 'signup' %}" class="active">Sign Up</a>
+        <a href="{% url 'login' %}" {% if request.resolver_match.url_name == 'login' %}class="active"{% endif %}>Login</a>
+        <a href="{% url 'signup' %}" {% if request.resolver_match.url_name == 'signup' %}class="active"{% endif %}>Sign Up</a>
       {% endif %}
     </div>
   </nav>

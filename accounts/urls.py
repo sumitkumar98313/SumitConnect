@@ -13,8 +13,6 @@ urlpatterns = [
     path('users/', views.users_list, name='users_list'),
     path('users/<str:username>/', views.user_profile, name='user_profile'),
     path('users/<str:username>/follow/', views.follow_user, name='follow_user'),
-
-    # Feed & Posts
     path('feed/', views.feed, name='feed'),
     path('feed/create/', views.create_post, name='create_post'),
     path('feed/post/<int:post_id>/', views.post_detail, name='post_detail'),
@@ -22,3 +20,6 @@ urlpatterns = [
     path('feed/post/<int:post_id>/like/', views.like_post, name='like_post'),
     path('feed/comment/<int:comment_id>/delete/', views.delete_comment, name='delete_comment'),
 ]
+
+handler404 = 'accounts.views.error_404'
+handler500 = 'accounts.views.error_500'
