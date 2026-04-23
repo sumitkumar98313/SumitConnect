@@ -22,4 +22,4 @@ urlpatterns = [
 ]
 
 handler404 = 'accounts.views.error_404'
-handler500 = 'accounts.views.error_500'
+handler500 = 'accounts.views.error_500'~
