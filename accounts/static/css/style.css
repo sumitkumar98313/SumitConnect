@@ -1,41 +1,172 @@
-body{
-    font-family: Arial;
-    background:#f4f6f9;
-    margin:0;
+/* =============================================
+   SumitConnect — Purple Galaxy Theme
+   by Sumit Kumar | github.com/sumitkumar98313
+   ============================================= */
+
+/* ── Global ── */
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #0e0520 0%, #2a0a4e 50%, #1a0638 100%);
+    min-height: 100vh;
+    margin: 0;
+    color: #d0b0ff;
 }
 
-.navbar{
-    background:#2c3e50;
-    color:white;
-    padding:15px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+/* ── Navbar ── */
+.navbar {
+    background: rgba(20, 5, 50, 0.92);
+    color: white;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(180, 100, 255, 0.25);
+    box-shadow: 0 4px 24px rgba(120, 0, 255, 0.2);
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 999;
 }
 
-.nav-links a{
-    color:white;
-    margin-left:20px;
-    text-decoration:none;
-    font-weight:bold;
+/* ── Nav Links ── */
+.nav-links a {
+    color: #c080ff;
+    margin-left: 20px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.2s ease;
 }
 
-.nav-links a:hover{
-    color:#1abc9c;
+.nav-links a:hover {
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(200, 100, 255, 0.8);
 }
 
-.container{
-    width:80%;
-    margin:auto;
-    margin-top:40px;
-    text-align:center;
+/* ── Container ── */
+.container {
+    width: 80%;
+    margin: auto;
+    margin-top: 40px;
+    text-align: center;
 }
 
-.card{
-    background:white;
-    padding:20px;
-    border-radius:10px;
-    width:300px;
-    margin:auto;
-    box-shadow:0px 0px 10px rgba(0,0,0,0.1);
+/* ── Card ── */
+.card {
+    background: rgba(40, 10, 80, 0.82);
+    padding: 20px;
+    border-radius: 14px;
+    width: 300px;
+    margin: auto;
+    border: 1px solid rgba(180, 100, 255, 0.2);
+    box-shadow:
+        0 8px 32px rgba(80, 0, 160, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    transform: perspective(1000px) rotateX(0.8deg);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    color: #e0c8ff;
+}
+
+.card:hover {
+    transform: perspective(1000px) rotateX(0deg) translateY(-4px);
+    box-shadow:
+        0 16px 48px rgba(120, 0, 255, 0.55),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* ── Headings ── */
+h1, h2, h3, h4, h5, h6 {
+    color: #e0c0ff;
+}
+
+/* ── Paragraphs & Labels ── */
+p, label, span {
+    color: #c0a0ee;
+}
+
+/* ── Links ── */
+a {
+    color: #c080ff;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+a:hover {
+    color: #ffffff;
+}
+
+/* ── Buttons ── */
+button, .btn, input[type="submit"] {
+    background: linear-gradient(135deg, #9b30ff, #6a00d4);
+    color: #ffffff;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    box-shadow: 0 4px 15px rgba(150, 50, 255, 0.45);
+    transition: all 0.2s ease;
+}
+
+button:hover, .btn:hover, input[type="submit"]:hover {
+    background: linear-gradient(135deg, #b040ff, #8000ff);
+    box-shadow: 0 6px 22px rgba(180, 60, 255, 0.6);
+    transform: translateY(-2px);
+}
+
+/* ── Inputs ── */
+input[type="text"],
+input[type="email"],
+input[type="password"], 
+textarea,
+select {
+    background: rgba(30, 5, 60, 0.75);
+    border: 1px solid rgba(180, 100, 255, 0.3);
+    border-radius: 8px;
+    color: #e8d0ff;
+    padding: 10px 14px;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 14px;
+    transition: border 0.2s, box-shadow 0.2s;
+    outline: none;
+}
+
+input:focus, textarea:focus, select:focus {
+    border-color: rgba(180, 80, 255, 0.7);
+    box-shadow: 0 0 0 3px rgba(150, 50, 255, 0.2);
+    background: rgba(40, 8, 75, 0.9);
+}
+
+input::placeholder, textarea::placeholder {
+    color: #7050a0;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(20, 5, 40, 0.6);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(150, 50, 255, 0.5);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(180, 80, 255, 0.8);
+}
+
+/* ── Footer ── */
+footer {
+    background: rgba(10, 2, 30, 0.95);
+    border-top: 1px solid rgba(180, 100, 255, 0.15);
+    color: #7050a0;
+    text-align: center;
+    padding: 16px;
+    font-size: 13px;
+    margin-top: 60px;
 }
