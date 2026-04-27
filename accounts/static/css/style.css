@@ -3,6 +3,9 @@
    by Sumit Kumar | github.com/sumitkumar98313
    ============================================= */
 
+/* ── Smooth Scroll ── */
+html { scroll-behavior: smooth; }
+
 /* ── Global ── */
 body {
     font-family: Arial, sans-serif;
@@ -117,7 +120,7 @@ button:hover, .btn:hover, input[type="submit"]:hover {
 /* ── Inputs ── */
 input[type="text"],
 input[type="email"],
-input[type="password"], 
+input[type="password"],
 textarea,
 select {
     background: rgba(30, 5, 60, 0.75);
