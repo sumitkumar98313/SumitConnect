@@ -26,8 +26,11 @@
       background-attachment: fixed;
       color: var(--text);
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
+    /* ── Navbar ── */
     nav {
       background: rgba(20, 5, 50, 0.88);
       backdrop-filter: blur(12px);
@@ -41,8 +44,6 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      flex-wrap: wrap;
-      gap: 8px;
       box-shadow: 0 4px 24px rgba(120, 0, 255, 0.15);
     }
 
@@ -54,9 +55,16 @@
       text-decoration: none;
       letter-spacing: -0.5px;
       text-shadow: 0 0 20px rgba(192, 128, 255, 0.4);
+      flex-shrink: 0;
     }
 
-    .nav-links { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
 
     .nav-links a {
       color: var(--muted);
@@ -66,10 +74,73 @@
       padding: 8px 14px;
       border-radius: 8px;
       transition: all 0.2s;
+      white-space: nowrap;
     }
 
     .nav-links a:hover { color: var(--text); background: rgba(180, 100, 255, 0.15); }
     .nav-links a.active { color: #fff; background: rgba(150, 50, 255, 0.45); font-weight: 600; border: 1px solid rgba(180, 100, 255, 0.3); }
+
+    /* Hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 8px;
+      border: none;
+      background: none;
+    }
+    .hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--accent);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* Mobile nav drawer */
+    .mobile-nav {
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      padding: 12px 16px;
+      background: rgba(20, 5, 50, 0.97);
+      border-bottom: 1px solid rgba(180, 100, 255, 0.2);
+      position: sticky;
+      top: 64px;
+      z-index: 99;
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      padding: 10px 14px;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+    .mobile-nav a:hover, .mobile-nav a.active {
+      color: #fff;
+      background: rgba(150, 50, 255, 0.3);
+    }
+    .mobile-nav form button {
+      width: 100%;
+      text-align: left;
+      color: var(--danger);
+      background: none;
+      border: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.2s;
+    }
+    .mobile-nav form button:hover { background: rgba(255, 77, 77, 0.1); }
 
     .nav-links form { margin: 0; }
     .nav-links form button {
@@ -83,17 +154,27 @@
       cursor: pointer;
       font-family: 'DM Sans', sans-serif;
       transition: all 0.2s;
+      white-space: nowrap;
     }
     .nav-links form button:hover { background: rgba(255, 77, 77, 0.1); }
 
-    .page-wrapper { max-width: 1000px; margin: 0 auto; padding: 48px 24px; }
+    /* ── Page wrapper ── */
+    .page-wrapper {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 48px 24px;
+      width: 100%;
+      flex: 1;
+    }
 
+    /* ── Messages ── */
     .messages { list-style: none; margin-bottom: 24px; }
     .messages li { padding: 12px 18px; border-radius: var(--radius); font-size: 0.9rem; margin-bottom: 8px; font-weight: 500; }
     .messages .success { background: rgba(150, 50, 255, 0.15); color: var(--accent); border: 1px solid rgba(180, 100, 255, 0.3); }
     .messages .error { background: rgba(255, 77, 77, 0.1); color: #ff8080; border: 1px solid rgba(255, 77, 77, 0.25); }
     .messages .info { background: rgba(120, 50, 200, 0.15); color: #c8a0ff; border: 1px solid rgba(150, 80, 220, 0.3); }
 
+    /* ── Card ── */
     .card {
       background: rgba(30, 8, 60, 0.75);
       border: 1px solid rgba(180, 100, 255, 0.15);
@@ -104,9 +185,11 @@
       -webkit-backdrop-filter: blur(8px);
     }
 
+    /* ── Typography ── */
     .page-title { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; margin-bottom: 8px; letter-spacing: -1px; color: var(--text); }
     .page-subtitle { color: var(--muted); margin-bottom: 32px; font-size: 0.95rem; }
 
+    /* ── Forms ── */
     .form-group { margin-bottom: 20px; }
     .form-group label { display: block; font-size: 0.85rem; font-weight: 500; color: var(--muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
     .form-group input, .form-group textarea {
@@ -128,6 +211,7 @@
     }
     .form-group textarea { resize: vertical; min-height: 100px; }
 
+    /* ── Buttons ── */
     .btn { display: inline-block; padding: 11px 24px; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 600; cursor: pointer; border: none; text-decoration: none; transition: all 0.2s; }
     .btn-primary { background: linear-gradient(135deg, #9b30ff, #6a00d4); color: #fff; box-shadow: 0 4px 15px rgba(150, 50, 255, 0.35); }
     .btn-primary:hover { background: linear-gradient(135deg, #b040ff, #8000ff); box-shadow: 0 6px 22px rgba(180, 60, 255, 0.5); transform: translateY(-1px); }
@@ -136,11 +220,11 @@
     .btn-danger { background: #c0392b; color: #fff; border: none; }
     .btn-danger:hover { background: #a93226; }
 
+    /* ── Avatar ── */
     .avatar { border-radius: 50%; object-fit: cover; border: 2px solid var(--border); }
     .avatar-lg { width: 100px; height: 100px; }
     .avatar-md { width: 56px; height: 56px; }
     .avatar-sm { width: 36px; height: 36px; }
-
     .avatar-placeholder {
       border-radius: 50%;
       background: rgba(150, 50, 255, 0.2);
@@ -158,24 +242,90 @@
     .text-muted { color: var(--muted); font-size: 0.9rem; }
     .text-accent { color: var(--accent); }
 
+    /* ── Footer ── */
+    footer {
+      background: rgba(10, 2, 30, 0.95);
+      border-top: 1px solid rgba(180, 100, 255, 0.15);
+      padding: 28px 40px;
+      margin-top: auto;
+    }
+    .footer-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .footer-brand {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .footer-links {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .footer-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--accent); }
+    .footer-copy {
+      color: var(--muted);
+      font-size: 0.8rem;
+      width: 100%;
+      text-align: center;
+      margin-top: 12px;
+      border-top: 1px solid rgba(180, 100, 255, 0.08);
+      padding-top: 12px;
+    }
+
+    /* ── Scrollbar ── */
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: rgba(20, 5, 40, 0.6); }
     ::-webkit-scrollbar-thumb { background: rgba(150, 50, 255, 0.4); border-radius: 3px; }
     ::-webkit-scrollbar-thumb:hover { background: rgba(180, 80, 255, 0.7); }
 
-    @media (max-width: 600px) {
-      nav { padding: 12px 16px; height: auto; }
-      .nav-links a { padding: 6px 10px; font-size: 0.8rem; }
-      .page-wrapper { padding: 28px 16px; }
-      .page-title { font-size: 1.5rem; }
-      .card { padding: 20px; }
+    /* ── Mobile Responsive ── */
+    @media (max-width: 768px) {
+      nav {
+        padding: 0 16px;
+        height: 56px;
+      }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .page-wrapper { padding: 24px 16px; }
+      .page-title { font-size: 1.6rem; }
+      .card { padding: 20px 16px; }
+      footer { padding: 20px 16px; }
+      .footer-inner { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .footer-links { gap: 14px; }
+    }
+
+    @media (max-width: 480px) {
+      .page-title { font-size: 1.3rem; }
+      .card { padding: 16px 12px; }
+      .btn { padding: 10px 18px; font-size: 0.85rem; }
+      .avatar-lg { width: 72px; height: 72px; }
+      .avatar-md { width: 44px; height: 44px; }
     }
   </style>
 </head>
 <body>
 
+  <!-- Desktop Navbar -->
   <nav>
     <a href="{% url 'home' %}" class="nav-brand">SumitConnect</a>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
     <div class="nav-links">
       {% if user.is_authenticated %}
         <a href="{% url 'home' %}" {% if request.resolver_match.url_name == 'home' %}class="active"{% endif %}>Home</a>
@@ -194,6 +344,25 @@
     </div>
   </nav>
 
+  <!-- Mobile Navbar Drawer -->
+  <div class="mobile-nav" id="mobile-nav">
+    {% if user.is_authenticated %}
+      <a href="{% url 'home' %}" {% if request.resolver_match.url_name == 'home' %}class="active"{% endif %}>🏠 Home</a>
+      <a href="{% url 'feed' %}" {% if request.resolver_match.url_name == 'feed' %}class="active"{% endif %}>📰 Feed</a>
+      <a href="{% url 'dashboard' %}" {% if request.resolver_match.url_name == 'dashboard' %}class="active"{% endif %}>📊 Dashboard</a>
+      <a href="{% url 'profile' %}" {% if request.resolver_match.url_name == 'profile' %}class="active"{% endif %}>👤 Profile</a>
+      <a href="{% url 'users_list' %}" {% if request.resolver_match.url_name == 'users_list' %}class="active"{% endif %}>🌐 Users</a>
+      <form method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit">🚪 Logout</button>
+      </form>
+    {% else %}
+      <a href="{% url 'login' %}" {% if request.resolver_match.url_name == 'login' %}class="active"{% endif %}>🔐 Login</a>
+      <a href="{% url 'signup' %}" {% if request.resolver_match.url_name == 'signup' %}class="active"{% endif %}>✨ Sign Up</a>
+    {% endif %}
+  </div>
+
+  <!-- Page Content -->
   <div class="page-wrapper">
     {% if messages %}
       <ul class="messages">
@@ -204,6 +373,37 @@
     {% endif %}
     {% block content %}{% endblock %}
   </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-inner">
+      <a href="{% url 'home' %}" class="footer-brand">✦ SumitConnect</a>
+      <div class="footer-links">
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'feed' %}">Feed</a>
+        <a href="{% url 'users_list' %}">Users</a>
+        <a href="https://github.com/sumitkumar98313/SumitConnect" target="_blank">GitHub</a>
+        <a href="https://sumitconnect.onrender.com" target="_blank">Live Demo</a>
+      </div>
+      <div class="footer-copy">
+        Built with Django by <a href="https://github.com/sumitkumar98313" target="_blank" style="color:var(--accent);text-decoration:none;">Sumit Kumar</a> &mdash; BCA Final Year Project, MIT Meerut &copy; 2026
+      </div>
+    </div>
+  </footer>
+
+  <!-- Hamburger Script -->
+  <script>
+    const hamburger = document.getElementById('hamburger');
+    const mobileNav = document.getElementById('mobile-nav');
+    hamburger.addEventListener('click', function() {
+      mobileNav.classList.toggle('open');
+    });
+    document.addEventListener('click', function(e) {
+      if (!hamburger.contains(e.target) && !mobileNav.contains(e.target)) {
+        mobileNav.classList.remove('open');
+      }
+    });
+  </script>
 
 </body>
 </html>
