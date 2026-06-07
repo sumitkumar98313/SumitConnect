@@ -1,0 +1,129 @@
+{% extends 'accounts/base.html' %}
+{% block title %}Profile — SumitConnect{% endblock %}
+
+{% block content %}
+
+<h1 class="page-title">Your Profile</h1>
+<p class="page-subtitle">Manage your account information</p>
+
+<!-- two column grid - left side info, right side edit form -->
+<style>
+  .profile-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 24px;
+    align-items: start;
+  }
+
+  /* on mobile stack them vertically */
+  @media (max-width: 640px) {
+    .profile-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<div class="profile-grid">
+
+  <!-- left card - profile picture and account actions -->
+  <div class="card" style="text-align:center;">
+
+    {% if user.profile.profile_picture %}
+      <img src="{{ user.profile.profile_picture.url }}" class="avatar avatar-lg" alt="{{ user.username }}" style="margin-bottom:16px;" />
+    {% else %}
+      <!-- placeholder with first letter of username -->
+      <div class="avatar-placeholder avatar-lg" style="font-size:2.5rem; margin:0 auto 16px;">
+        {{ user.username|first|upper }}
+      </div>
+    {% endif %}
+
+    <div style="font-family:'Syne',sans-serif; font-weight:700; font-size:1.1rem;">{{ user.username }}</div>
+    <div class="text-muted" style="font-size:0.85rem; margin-top:6px;">Joined {{ user.date_joined|date:"F Y" }}</div>
+
+    <hr />
+
+    <!-- account action buttons -->
+    <a href="{% url 'change_password' %}" class="btn btn-secondary" style="width:100%; margin-bottom:10px; display:block; text-align:center;">Change Password</a>
+    <a href="{% url 'delete_account' %}" class="btn btn-danger" style="width:100%; display:block; text-align:center;">Delete Account</a>
+
+  </div>
+
+  <!-- right card - edit profile form -->
+  <div class="card">
+    <h3 style="font-family:'Syne',sans-serif; font-weight:700; margin-bottom:24px;">Edit Profile</h3>
+
+    <form method="POST" enctype="multipart/form-data" novalidate>
+      {% csrf_token %}
+
+      <div class="form-group">
+        <label for="bio">Bio</label>
+        <textarea id="bio" name="bio" placeholder="Tell others about yourself..." maxlength="200">{{ user.profile.bio }}</textarea>
+        <!-- bio character counter -->
+        <div style="text-align:right; font-size:0.78rem; color:var(--muted); margin-top:4px;">
+          <span id="bioCharCount">{{ user.profile.bio|length }}</span>/200
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="profile_picture">Profile Picture</label>
+        <input type="file" id="profile_picture" name="profile_picture" accept="image/*"
+               style="color:var(--muted); padding:10px 0; border:none; background:transparent;" />
+
+        <!-- show this message if user already has a picture -->
+        {% if user.profile.profile_picture %}
+          <div class="text-muted" style="font-size:0.8rem; margin-top:6px;">Current photo will be replaced if you select a new one</div>
+        {% endif %}
+
+        <!-- image preview box - hidden until file is selected -->
+        <div id="previewBox" style="display:none; margin-top:12px;">
+          <div class="text-muted" style="font-size:0.8rem; margin-bottom:6px;">Preview:</div>
+          <img id="imagePreview" src="" alt="preview" style="width:80px; height:80px; border-radius:50%; object-fit:cover; border:2px solid var(--accent);" />
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+  </div>
+
+</div>
+
+<script>
+  // bio character counter
+  var bioTextarea = document.getElementById('bio');
+  var bioCharCount = document.getElementById('bioCharCount');
+
+  bioTextarea.addEventListener('input', function() {
+    var len = this.value.length;
+    bioCharCount.textContent = len;
+
+    // turn red when close to limit
+    if (len >= 180) {
+      bioCharCount.style.color = '#ff6b6b';
+    } else {
+      bioCharCount.style.color = 'var(--muted)';
+    }
+  });
+
+  // profile picture preview
+  var picInput = document.getElementById('profile_picture');
+  var previewBox = document.getElementById('previewBox');
+  var previewImg = document.getElementById('imagePreview');
+
+  picInput.addEventListener('change', function() {
+    var file = this.files[0];
+
+    if (file) {
+      // read and show the selected image as preview
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        previewImg.src = e.target.result;
+        previewBox.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    } else {
+      // hide preview if no file selected
+      previewBox.style.display = 'none';
+      previewImg.src = '';
+    }
+  });
+</script>
+
+{% endblock %}
