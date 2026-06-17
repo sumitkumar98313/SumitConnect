@@ -4,7 +4,7 @@
 {% block content %}
 
 <h1 class="page-title">Dashboard</h1>
-<p class="page-subtitle">Welcome back, {{ user.username }} 👋</p>
+<p class="page-subtitle">Welcome back, {{ user.username }}</p>
 
 <!-- profile card at top of dashboard -->
 <div class="card" style="display:flex; align-items:center; gap:24px; margin-bottom:24px; flex-wrap:wrap;">
@@ -19,7 +19,7 @@
   {% endif %}
 
   <div style="flex:1;">
-    <div style="font-family:'Syne',sans-serif; font-weight:800; font-size:1.4rem;">{{ user.username }}</div>
+    <div style="font-weight:bold; font-size:1.3rem;">{{ user.username }}</div>
 
     <!-- show bio if exists, otherwise show placeholder text -->
     <div class="text-muted" style="margin-top:6px;">
@@ -33,14 +33,14 @@
     <!-- action buttons -->
     <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
       <a href="{% url 'profile' %}" class="btn btn-secondary" style="font-size:0.85rem; padding:8px 16px;">Edit Profile</a>
-      <a href="{% url 'feed' %}" class="btn btn-primary" style="font-size:0.85rem; padding:8px 16px;">+ New Post</a>
+      <a href="{% url 'feed' %}" class="btn btn-primary" style="font-size:0.85rem; padding:8px 16px;">New Post</a>
     </div>
   </div>
 
   <!-- member since date on the right -->
   <div style="text-align:right;">
-    <div class="text-muted" style="font-size:0.8rem; text-transform:uppercase; letter-spacing:0.5px;">Member since</div>
-    <div style="font-weight:600; margin-top:4px;">{{ user.date_joined|date:"M Y" }}</div>
+    <div class="text-muted" style="font-size:0.8rem;">Member since</div>
+    <div style="font-weight:bold; margin-top:4px;">{{ user.date_joined|date:"M Y" }}</div>
   </div>
 
 </div>
@@ -49,21 +49,21 @@
 <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:16px; margin-bottom:32px;">
 
   <div class="card" style="text-align:center;">
-    <div style="font-size:2rem; font-family:'Syne',sans-serif; font-weight:800; color:var(--accent);">
+    <div style="font-size:1.8rem; font-weight:bold; color:#6a1b9a;">
       {{ my_posts_count|default:"0" }}
     </div>
     <div class="text-muted" style="font-size:0.85rem; margin-top:4px;">Posts</div>
   </div>
 
   <div class="card" style="text-align:center;">
-    <div style="font-size:2rem; font-family:'Syne',sans-serif; font-weight:800; color:var(--accent);">
+    <div style="font-size:1.8rem; font-weight:bold; color:#6a1b9a;">
       {{ followers_count|default:"0" }}
     </div>
     <div class="text-muted" style="font-size:0.85rem; margin-top:4px;">Followers</div>
   </div>
 
   <div class="card" style="text-align:center;">
-    <div style="font-size:2rem; font-family:'Syne',sans-serif; font-weight:800; color:var(--accent);">
+    <div style="font-size:1.8rem; font-weight:bold; color:#6a1b9a;">
       {{ following_count|default:"0" }}
     </div>
     <div class="text-muted" style="font-size:0.85rem; margin-top:4px;">Following</div>
@@ -71,13 +71,13 @@
 
 </div>
 
-<h2 style="font-family:'Syne',sans-serif; font-weight:700; margin-bottom:16px; font-size:1.1rem;">Recently Joined</h2>
+<h2 style="font-weight:bold; margin-bottom:16px; font-size:1.1rem;">Recently Joined</h2>
 
 <!-- list of recently joined users -->
 {% if recent_users %}
   <div class="card" style="padding:0; overflow:hidden;">
     {% for u in recent_users %}
-      <div style="display:flex; align-items:center; gap:14px; padding:16px 24px; {% if not forloop.last %}border-bottom:1px solid var(--border);{% endif %}">
+      <div style="display:flex; align-items:center; gap:14px; padding:16px 24px; {% if not forloop.last %}border-bottom:1px solid #ddd;{% endif %}">
 
         <!-- avatar or placeholder -->
         {% if u.profile.profile_picture %}
@@ -87,7 +87,7 @@
         {% endif %}
 
         <div style="flex:1;">
-          <a href="{% url 'user_profile' u.username %}" style="color:var(--text); text-decoration:none; font-weight:500;">
+          <a href="{% url 'user_profile' u.username %}" style="color:#333; font-weight:500;">
             {{ u.username }}
           </a>
           {% if u.profile.bio %}
@@ -105,7 +105,6 @@
 {% else %}
   <!-- shown when no recent users found -->
   <div class="card" style="text-align:center; padding:40px 24px;">
-    <div style="font-size:2rem; margin-bottom:10px;">👥</div>
     <div class="text-muted">No one has joined recently.</div>
   </div>
 {% endif %}

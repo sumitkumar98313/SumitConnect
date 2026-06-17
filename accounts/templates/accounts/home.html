@@ -18,56 +18,45 @@
     {% endif %}
 
     <div>
-      <h1 class="page-title">Hey, {{ user.username }} 👋</h1>
+      <h1 class="page-title">Hey, {{ user.username }}</h1>
       <p class="text-muted">
         {% if user.profile.bio %}
           {{ user.profile.bio }}
         {% else %}
-          No bio yet — <a href="{% url 'profile' %}" style="color:var(--accent);">add one</a>
+          No bio yet — <a href="{% url 'profile' %}">add one</a>
         {% endif %}
       </p>
     </div>
 
   </div>
 
-  <!-- card hover effect style -->
-  <style>
-    .home-card { text-decoration:none; display:block; }
-    .home-card .card { height:100%; transition:border-color 0.2s, transform 0.2s; }
-    .home-card:hover .card { border-color:var(--accent); transform:translateY(-2px); }
-  </style>
-
   <!-- navigation cards grid -->
   <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:16px;">
 
-    <a href="{% url 'feed' %}" class="home-card">
+    <a href="{% url 'feed' %}" style="text-decoration:none;">
       <div class="card">
-        <div style="font-size:1.8rem; margin-bottom:10px;">📰</div>
-        <div style="font-family:'Syne',sans-serif; font-weight:700; margin-bottom:4px;">Feed</div>
+        <div style="font-weight:bold; margin-bottom:4px;">Feed</div>
         <div class="text-muted">See what everyone is sharing</div>
       </div>
     </a>
 
-    <a href="{% url 'dashboard' %}" class="home-card">
+    <a href="{% url 'dashboard' %}" style="text-decoration:none;">
       <div class="card">
-        <div style="font-size:1.8rem; margin-bottom:10px;">📊</div>
-        <div style="font-family:'Syne',sans-serif; font-weight:700; margin-bottom:4px;">Dashboard</div>
+        <div style="font-weight:bold; margin-bottom:4px;">Dashboard</div>
         <div class="text-muted">View your activity overview</div>
       </div>
     </a>
 
-    <a href="{% url 'profile' %}" class="home-card">
+    <a href="{% url 'profile' %}" style="text-decoration:none;">
       <div class="card">
-        <div style="font-size:1.8rem; margin-bottom:10px;">👤</div>
-        <div style="font-family:'Syne',sans-serif; font-weight:700; margin-bottom:4px;">Profile</div>
+        <div style="font-weight:bold; margin-bottom:4px;">Profile</div>
         <div class="text-muted">Update your bio and picture</div>
       </div>
     </a>
 
-    <a href="{% url 'users_list' %}" class="home-card">
+    <a href="{% url 'users_list' %}" style="text-decoration:none;">
       <div class="card">
-        <div style="font-size:1.8rem; margin-bottom:10px;">🌐</div>
-        <div style="font-family:'Syne',sans-serif; font-weight:700; margin-bottom:4px;">Explore Users</div>
+        <div style="font-weight:bold; margin-bottom:4px;">Explore Users</div>
         <div class="text-muted">Find and connect with others</div>
       </div>
     </a>
@@ -78,13 +67,12 @@
 
   <!-- landing page for logged out visitors -->
   <div style="text-align:center; padding:60px 0 40px;">
-    <div style="font-size:3rem; margin-bottom:16px;">⚡</div>
-    <h1 class="page-title" style="font-size:3rem; margin-bottom:16px;">SumitConnect</h1>
-    <p class="text-muted" style="max-width:440px; margin:0 auto 36px; font-size:1.05rem; line-height:1.6;">
+    <h1 class="page-title" style="font-size:2.5rem; margin-bottom:16px;">SumitConnect</h1>
+    <p class="text-muted" style="max-width:440px; margin:0 auto 36px; font-size:1rem; line-height:1.6;">
       A platform to connect with other developers. Share your bio, post updates and grow your network.
     </p>
     <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
-      <a href="{% url 'signup' %}" class="btn btn-primary">Get Started →</a>
+      <a href="{% url 'signup' %}" class="btn btn-primary">Get Started</a>
       <a href="{% url 'login' %}" class="btn btn-secondary">Login</a>
     </div>
   </div>
@@ -92,22 +80,19 @@
   <!-- features section shown to logged out users -->
   <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:16px; margin-top:48px;">
 
-    <div class="card" style="text-align:center; padding:28px 20px;">
-      <div style="font-size:2rem; margin-bottom:12px;">🧑‍💻</div>
-      <div style="font-family:'Syne',sans-serif; font-weight:700; margin-bottom:6px;">Developer Profiles</div>
-      <div class="text-muted" style="font-size:0.88rem; line-height:1.6;">Build your public profile with bio and avatar</div>
+    <div class="card" style="text-align:center; padding:28px 20px; background-color:#6a1b9a; border-color:#6a1b9a;">
+      <div style="font-weight:bold; margin-bottom:6px; color:#fff;">Developer Profiles</div>
+      <div style="font-size:0.9rem; line-height:1.6; color:#e0d0f0;">Build your public profile with bio and avatar</div>
     </div>
 
-    <div class="card" style="text-align:center; padding:28px 20px;">
-      <div style="font-size:2rem; margin-bottom:12px;">📰</div>
-      <div style="font-family:'Syne',sans-serif; font-weight:700; margin-bottom:6px;">Shared Feed</div>
-      <div class="text-muted" style="font-size:0.88rem; line-height:1.6;">Post updates, share images, like and comment</div>
+    <div class="card" style="text-align:center; padding:28px 20px; background-color:#6a1b9a; border-color:#6a1b9a;">
+      <div style="font-weight:bold; margin-bottom:6px; color:#fff;">Shared Feed</div>
+      <div style="font-size:0.9rem; line-height:1.6; color:#e0d0f0;">Post updates, share images, like and comment</div>
     </div>
 
-    <div class="card" style="text-align:center; padding:28px 20px;">
-      <div style="font-size:2rem; margin-bottom:12px;">🤝</div>
-      <div style="font-family:'Syne',sans-serif; font-weight:700; margin-bottom:6px;">Follow & Connect</div>
-      <div class="text-muted" style="font-size:0.88rem; line-height:1.6;">Follow other developers and grow your network</div>
+    <div class="card" style="text-align:center; padding:28px 20px; background-color:#6a1b9a; border-color:#6a1b9a;">
+      <div style="font-weight:bold; margin-bottom:6px; color:#fff;">Follow & Connect</div>
+      <div style="font-size:0.9rem; line-height:1.6; color:#e0d0f0;">Follow other developers and grow your network</div>
     </div>
 
   </div>

@@ -4,10 +4,10 @@
 {% block content %}
 
 <!-- back to feed link -->
-<a href="{% url 'feed' %}" class="text-muted" style="text-decoration:none; font-size:0.9rem;">← Back to Feed</a>
+<a href="{% url 'feed' %}" class="text-muted">Back to Feed</a>
 
 <!-- post card -->
-<div class="card" style="margin-top:24px; margin-bottom:24px;">
+<div class="card" style="margin-top:20px; margin-bottom:24px;">
 
   <!-- post author info row -->
   <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
@@ -21,7 +21,7 @@
     {% endif %}
 
     <div style="flex:1;">
-      <a href="{% url 'user_profile' post.author.username %}" style="color:var(--text); text-decoration:none; font-weight:600;">
+      <a href="{% url 'user_profile' post.author.username %}" style="color:#333; font-weight:bold;">
         {{ post.author.username }}
       </a>
       <div class="text-muted" style="font-size:0.8rem;">{{ post.created_at|date:"d M Y, h:i A" }}</div>
@@ -31,7 +31,7 @@
     {% if post.author == request.user %}
       <form method="POST" action="{% url 'delete_post' post.id %}" onsubmit="return confirm('Delete this post?')" style="margin:0;">
         {% csrf_token %}
-        <button type="submit" style="background:none; border:none; color:var(--danger); font-size:0.85rem; cursor:pointer; font-family:'DM Sans',sans-serif; padding:0;">
+        <button type="submit" style="background:none; border:none; color:#c0392b; font-size:0.85rem; cursor:pointer; padding:0;">
           Delete
         </button>
       </form>
@@ -40,21 +40,21 @@
   </div>
 
   <!-- post text content -->
-  <p style="line-height:1.7; margin-bottom:16px; font-size:1.05rem;">{{ post.content }}</p>
+  <p style="line-height:1.6; margin-bottom:16px; font-size:1rem;">{{ post.content }}</p>
 
   <!-- post image if there is one -->
   {% if post.image %}
-    <img src="{{ post.image.url }}" alt="post image" style="width:100%; max-height:500px; object-fit:cover; border-radius:8px; margin-bottom:16px;" />
+    <img src="{{ post.image.url }}" alt="post image" style="width:100%; max-height:500px; object-fit:cover; border-radius:4px; margin-bottom:16px;" />
   {% endif %}
 
   <!-- like button -->
-  <div style="padding-top:12px; border-top:1px solid var(--border);">
+  <div style="padding-top:12px; border-top:1px solid #ddd;">
     <form method="POST" action="{% url 'like_post' post.id %}" style="margin:0;">
       {% csrf_token %}
       <input type="hidden" name="next" value="{% url 'post_detail' post.id %}" />
-      <button type="submit" style="background:none; border:none; cursor:pointer; display:inline-flex; align-items:center; gap:6px; font-family:'DM Sans',sans-serif; font-size:0.95rem; padding:0; color:{% if post.liked_by_user %}#ff6b6b{% else %}var(--muted){% endif %};">
-        {% if post.liked_by_user %}❤️{% else %}🤍{% endif %}
-        {{ post.likes_count }} Like{{ post.likes_count|pluralize }}
+      <button type="submit" style="background:none; border:none; cursor:pointer; font-size:0.95rem; padding:0; color:{% if post.liked_by_user %}#c0392b{% else %}#777{% endif %};">
+        {% if post.liked_by_user %}Liked{% else %}Like{% endif %}
+        ({{ post.likes_count }})
       </button>
     </form>
   </div>
@@ -62,7 +62,7 @@
 </div>
 
 <!-- comments section heading -->
-<h3 style="font-family:'Syne',sans-serif; font-weight:700; margin-bottom:16px;">
+<h3 style="font-weight:bold; margin-bottom:16px;">
   Comments ({{ comments|length }})
 </h3>
 
@@ -74,7 +74,7 @@
       <label for="commentContent">Write a comment</label>
       <textarea id="commentContent" name="content" placeholder="Share your thoughts..." style="min-height:70px;" required maxlength="300"></textarea>
       <!-- character counter for comment -->
-      <div style="text-align:right; font-size:0.78rem; color:var(--muted); margin-top:4px;">
+      <div style="text-align:right; font-size:0.8rem; color:#777; margin-top:4px;">
         <span id="commentCharCount">0</span>/300
       </div>
     </div>
@@ -99,7 +99,7 @@
         {% endif %}
 
         <div style="flex:1;">
-          <a href="{% url 'user_profile' comment.user.username %}" style="color:var(--text); text-decoration:none; font-weight:600; font-size:0.9rem;">
+          <a href="{% url 'user_profile' comment.user.username %}" style="color:#333; font-weight:bold; font-size:0.9rem;">
             {{ comment.user.username }}
           </a>
           <div class="text-muted" style="font-size:0.78rem;">{{ comment.created_at|date:"d M Y, h:i A" }}</div>
@@ -109,7 +109,7 @@
         {% if comment.user == request.user %}
           <form method="POST" action="{% url 'delete_comment' comment.id %}" onsubmit="return confirm('Delete this comment?')" style="margin:0;">
             {% csrf_token %}
-            <button type="submit" style="background:none; border:none; color:var(--danger); font-size:0.8rem; cursor:pointer; font-family:'DM Sans',sans-serif; padding:0;">
+            <button type="submit" style="background:none; border:none; color:#c0392b; font-size:0.8rem; cursor:pointer; padding:0;">
               Delete
             </button>
           </form>
@@ -118,7 +118,7 @@
       </div>
 
       <!-- comment text -->
-      <p style="color:var(--text); line-height:1.6; font-size:0.95rem;">{{ comment.content }}</p>
+      <p style="color:#333; line-height:1.6; font-size:0.95rem;">{{ comment.content }}</p>
 
     </div>
   {% endfor %}
@@ -141,9 +141,9 @@
 
     // turn red when getting close to 300 limit
     if (len >= 270) {
-      commentCount.style.color = '#ff6b6b';
+      commentCount.style.color = 'red';
     } else {
-      commentCount.style.color = 'var(--muted)';
+      commentCount.style.color = '#777';
     }
   });
 </script>

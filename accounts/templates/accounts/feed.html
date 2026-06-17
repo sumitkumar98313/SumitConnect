@@ -18,20 +18,20 @@
                 required maxlength="500"></textarea>
 
       <!-- character counter -->
-      <div style="text-align:right; font-size:0.78rem; color:var(--muted); margin-top:4px;">
+      <div style="text-align:right; font-size:0.8rem; color:#777; margin-top:4px;">
         <span id="charCount">0</span>/500
       </div>
     </div>
 
     <!-- image preview box - hidden until image is selected -->
     <div id="imagePreviewBox" style="display:none; margin-bottom:12px;">
-      <img id="imagePreview" src="" alt="preview" style="max-width:100%; max-height:200px; border-radius:8px; object-fit:cover;" />
+      <img id="imagePreview" src="" alt="preview" style="max-width:100%; max-height:200px; border-radius:4px; object-fit:cover;" />
     </div>
 
     <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
       <!-- file input for image upload -->
-      <input type="file" name="image" id="imageInput" accept="image/*" style="color:var(--muted); font-size:0.85rem;" />
-      <button type="submit" class="btn btn-primary">Post →</button>
+      <input type="file" name="image" id="imageInput" accept="image/*" style="font-size:0.85rem;" />
+      <button type="submit" class="btn btn-primary">Post</button>
     </div>
 
   </form>
@@ -54,7 +54,7 @@
         {% endif %}
 
         <div style="flex:1;">
-          <a href="{% url 'user_profile' post.author.username %}" style="color:var(--text); text-decoration:none; font-weight:600;">
+          <a href="{% url 'user_profile' post.author.username %}" style="color:#333; font-weight:bold;">
             {{ post.author.username }}
           </a>
           <div class="text-muted" style="font-size:0.8rem;">{{ post.created_at|date:"d M Y, h:i A" }}</div>
@@ -64,7 +64,7 @@
         {% if post.author == request.user %}
           <form method="POST" action="{% url 'delete_post' post.id %}" onsubmit="return confirm('Delete this post?')" style="margin:0;">
             {% csrf_token %}
-            <button type="submit" style="background:none; border:none; color:var(--danger); font-size:0.85rem; cursor:pointer; font-family:'DM Sans',sans-serif; padding:0;">
+            <button type="submit" style="background:none; border:none; color:#c0392b; font-size:0.85rem; cursor:pointer; padding:0;">
               Delete
             </button>
           </form>
@@ -73,29 +73,29 @@
       </div>
 
       <!-- post content text -->
-      <p style="line-height:1.7; margin-bottom:16px;">{{ post.content }}</p>
+      <p style="line-height:1.6; margin-bottom:16px;">{{ post.content }}</p>
 
       <!-- post image if uploaded -->
       {% if post.image %}
-        <img src="{{ post.image.url }}" alt="post image" style="width:100%; max-height:400px; object-fit:cover; border-radius:8px; margin-bottom:16px;" />
+        <img src="{{ post.image.url }}" alt="post image" style="width:100%; max-height:400px; object-fit:cover; border-radius:4px; margin-bottom:16px;" />
       {% endif %}
 
       <!-- like and comment buttons -->
-      <div style="display:flex; align-items:center; gap:20px; padding-top:12px; border-top:1px solid var(--border);">
+      <div style="display:flex; align-items:center; gap:20px; padding-top:12px; border-top:1px solid #ddd;">
 
         <!-- like form -->
         <form method="POST" action="{% url 'like_post' post.id %}" style="margin:0;">
           {% csrf_token %}
           <input type="hidden" name="next" value="feed" />
-          <button type="submit" style="background:none; border:none; cursor:pointer; display:flex; align-items:center; gap:6px; font-family:'DM Sans',sans-serif; font-size:0.9rem; padding:0; color:{% if post.liked_by_user %}#ff6b6b{% else %}var(--muted){% endif %};">
-            {% if post.liked_by_user %}❤️{% else %}🤍{% endif %}
-            {{ post.likes_count }} Like{{ post.likes_count|pluralize }}
+          <button type="submit" style="background:none; border:none; cursor:pointer; font-size:0.9rem; padding:0; color:{% if post.liked_by_user %}#c0392b{% else %}#777{% endif %};">
+            {% if post.liked_by_user %}Liked{% else %}Like{% endif %}
+            ({{ post.likes_count }})
           </button>
         </form>
 
         <!-- comment link - goes to post detail page -->
-        <a href="{% url 'post_detail' post.id %}" style="text-decoration:none; color:var(--muted); font-size:0.9rem; display:flex; align-items:center; gap:6px;">
-          💬 {{ post.comments_count }} Comment{{ post.comments_count|pluralize }}
+        <a href="{% url 'post_detail' post.id %}" style="color:#777; font-size:0.9rem;">
+          Comments ({{ post.comments_count }})
         </a>
 
       </div>
@@ -106,8 +106,7 @@
 {% else %}
   <!-- shown when there are no posts at all -->
   <div class="card" style="text-align:center; padding:48px;">
-    <div style="font-size:2.5rem; margin-bottom:16px;">📭</div>
-    <div style="font-family:'Syne',sans-serif; font-weight:700; margin-bottom:8px;">No posts yet</div>
+    <div style="font-weight:bold; margin-bottom:8px;">No posts yet</div>
     <div class="text-muted">Be the first one to post something!</div>
   </div>
 {% endif %}
@@ -123,9 +122,9 @@
 
     // turn red when getting close to limit
     if (len >= 450) {
-      charCount.style.color = '#ff6b6b';
+      charCount.style.color = 'red';
     } else {
-      charCount.style.color = 'var(--muted)';
+      charCount.style.color = '#777';
     }
   });
 

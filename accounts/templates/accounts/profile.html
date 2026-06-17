@@ -12,7 +12,6 @@
     display: grid;
     grid-template-columns: 1fr 2fr;
     gap: 24px;
-    align-items: start;
   }
 
   /* on mobile stack them vertically */
@@ -35,7 +34,7 @@
       </div>
     {% endif %}
 
-    <div style="font-family:'Syne',sans-serif; font-weight:700; font-size:1.1rem;">{{ user.username }}</div>
+    <div style="font-weight:bold; font-size:1.1rem;">{{ user.username }}</div>
     <div class="text-muted" style="font-size:0.85rem; margin-top:6px;">Joined {{ user.date_joined|date:"F Y" }}</div>
 
     <hr />
@@ -48,7 +47,7 @@
 
   <!-- right card - edit profile form -->
   <div class="card">
-    <h3 style="font-family:'Syne',sans-serif; font-weight:700; margin-bottom:24px;">Edit Profile</h3>
+    <h3 style="font-weight:bold; margin-bottom:24px;">Edit Profile</h3>
 
     <form method="POST" enctype="multipart/form-data" novalidate>
       {% csrf_token %}
@@ -57,15 +56,14 @@
         <label for="bio">Bio</label>
         <textarea id="bio" name="bio" placeholder="Tell others about yourself..." maxlength="200">{{ user.profile.bio }}</textarea>
         <!-- bio character counter -->
-        <div style="text-align:right; font-size:0.78rem; color:var(--muted); margin-top:4px;">
+        <div style="text-align:right; font-size:0.8rem; color:#777; margin-top:4px;">
           <span id="bioCharCount">{{ user.profile.bio|length }}</span>/200
         </div>
       </div>
 
       <div class="form-group">
         <label for="profile_picture">Profile Picture</label>
-        <input type="file" id="profile_picture" name="profile_picture" accept="image/*"
-               style="color:var(--muted); padding:10px 0; border:none; background:transparent;" />
+        <input type="file" id="profile_picture" name="profile_picture" accept="image/*" style="padding:10px 0;" />
 
         <!-- show this message if user already has a picture -->
         {% if user.profile.profile_picture %}
@@ -75,7 +73,7 @@
         <!-- image preview box - hidden until file is selected -->
         <div id="previewBox" style="display:none; margin-top:12px;">
           <div class="text-muted" style="font-size:0.8rem; margin-bottom:6px;">Preview:</div>
-          <img id="imagePreview" src="" alt="preview" style="width:80px; height:80px; border-radius:50%; object-fit:cover; border:2px solid var(--accent);" />
+          <img id="imagePreview" src="" alt="preview" style="width:80px; height:80px; border-radius:50%; object-fit:cover; border:1px solid #ccc;" />
         </div>
       </div>
 
@@ -96,9 +94,9 @@
 
     // turn red when close to limit
     if (len >= 180) {
-      bioCharCount.style.color = '#ff6b6b';
+      bioCharCount.style.color = 'red';
     } else {
-      bioCharCount.style.color = 'var(--muted)';
+      bioCharCount.style.color = '#777';
     }
   });
 

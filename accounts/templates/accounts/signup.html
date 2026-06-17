@@ -16,19 +16,19 @@
         <label for="username">Username</label>
         <input type="text" id="username" name="username" placeholder="Letters, numbers, underscores only"
                value="{{ request.POST.username }}" autocomplete="username" required autofocus />
-        <div style="font-size:0.78rem; color:var(--muted); margin-top:5px;">Only letters, numbers and underscores. No spaces.</div>
+        <div style="font-size:0.8rem; color:#777; margin-top:5px;">Only letters, numbers and underscores. No spaces.</div>
       </div>
 
       <div class="form-group">
         <label for="password">Password</label>
-        <!-- password field with show/hide eye button -->
+        <!-- password field with show/hide button -->
         <div style="position:relative;">
           <input type="password" id="password" name="password" placeholder="Min. 6 characters"
-                 autocomplete="new-password" minlength="6" required style="padding-right:48px;" />
+                 autocomplete="new-password" minlength="6" required style="padding-right:50px;" />
           <button type="button" id="togglePassword" aria-label="Toggle password visibility"
-                  style="position:absolute; right:14px; top:50%; transform:translateY(-50%);
-                         background:none; border:none; cursor:pointer; font-size:1rem;
-                         color:var(--muted); padding:0; line-height:1;">👁</button>
+                  style="position:absolute; right:10px; top:8px;
+                         background:none; border:none; cursor:pointer; font-size:0.8rem;
+                         color:#6a1b9a; padding:0;">Show</button>
         </div>
       </div>
 
@@ -37,17 +37,17 @@
         <!-- confirm password with its own toggle -->
         <div style="position:relative;">
           <input type="password" id="confirm_password" name="confirm_password" placeholder="Repeat your password"
-                 autocomplete="new-password" required style="padding-right:48px;" />
+                 autocomplete="new-password" required style="padding-right:50px;" />
           <button type="button" id="toggleConfirm" aria-label="Toggle confirm password visibility"
-                  style="position:absolute; right:14px; top:50%; transform:translateY(-50%);
-                         background:none; border:none; cursor:pointer; font-size:1rem;
-                         color:var(--muted); padding:0; line-height:1;">👁</button>
+                  style="position:absolute; right:10px; top:8px;
+                         background:none; border:none; cursor:pointer; font-size:0.8rem;
+                         color:#6a1b9a; padding:0;">Show</button>
         </div>
         <!-- match message shown here by JS -->
-        <div id="matchMsg" style="font-size:0.78rem; margin-top:5px; display:none;"></div>
+        <div id="matchMsg" style="font-size:0.8rem; margin-top:5px; display:none;"></div>
       </div>
 
-      <button type="submit" id="submitBtn" class="btn btn-primary" style="width:100%; margin-top:12px; padding:14px; font-size:1rem;">
+      <button type="submit" id="submitBtn" class="btn btn-primary" style="width:100%; margin-top:12px; padding:10px; font-size:1rem;">
         Create Account
       </button>
     </form>
@@ -56,7 +56,7 @@
   <!-- link to login page -->
   <p class="text-muted" style="text-align:center; margin-top:20px;">
     Already have an account?
-    <a href="{% url 'login' %}" style="color:var(--accent); text-decoration:none; font-weight:500;">Login here</a>
+    <a href="{% url 'login' %}">Login here</a>
   </p>
 
 </div>
@@ -75,10 +75,10 @@
     btn.addEventListener('click', function() {
       if (input.type === 'password') {
         input.type = 'text';
-        btn.textContent = '🙈';
+        btn.textContent = 'Hide';
       } else {
         input.type = 'password';
-        btn.textContent = '👁';
+        btn.textContent = 'Show';
       }
     });
   }
@@ -97,11 +97,11 @@
     matchMsg.style.display = 'block';
 
     if (passwordInput.value === confirmInput.value) {
-      matchMsg.textContent = '✅ Passwords match';
-      matchMsg.style.color = '#c080ff';
+      matchMsg.textContent = 'Passwords match';
+      matchMsg.style.color = 'green';
     } else {
-      matchMsg.textContent = '❌ Passwords do not match';
-      matchMsg.style.color = '#ff6b6b';
+      matchMsg.textContent = 'Passwords do not match';
+      matchMsg.style.color = 'red';
     }
   }
 
@@ -114,8 +114,8 @@
     if (passwordInput.value !== confirmInput.value) {
       e.preventDefault(); // stop form submitting
       matchMsg.style.display = 'block';
-      matchMsg.textContent = '❌ Passwords do not match';
-      matchMsg.style.color = '#ff6b6b';
+      matchMsg.textContent = 'Passwords do not match';
+      matchMsg.style.color = 'red';
       confirmInput.focus();
     }
   });
