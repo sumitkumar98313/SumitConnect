@@ -6,36 +6,25 @@
 <h1 class="page-title">Explore Users</h1>
 <p class="page-subtitle">Find and connect with other developers</p>
 
-<!-- search bar input styling -->
-<style>
-  .search-input {
-    flex:1;
-    border:1px solid #ccc;
-    border-radius:4px;
-    padding:8px 10px;
-    font-family:Arial, sans-serif;
-    font-size:0.95rem;
-  }
-
-  .search-input:focus {
-    outline:none;
-    border-color:#6a1b9a;
-  }
-</style>
-
-<!-- search form -->
-<form method="GET" style="margin-bottom:24px; display:flex; gap:12px; flex-wrap:wrap;">
-  <input type="text" name="search" placeholder="Search by username..." value="{{ query }}" class="search-input" autocomplete="off" />
+<!-- Search form -->
+<form method="GET" style="display:flex; gap:10px; margin-bottom:28px; flex-wrap:wrap;">
+  <input type="text" name="search"
+         placeholder="Search by username..."
+         value="{{ query }}"
+         autocomplete="off"
+         style="flex:1; min-width:200px; padding:10px 13px; border:1px solid #e0e0e0;
+                border-radius:6px; font-family:'Poppins',sans-serif; font-size:0.9rem;
+                color:#1a1a1a; outline:none; transition:border-color 0.15s;"
+         onfocus="this.style.borderColor='#7C5CBF'"
+         onblur="this.style.borderColor='#e0e0e0'" />
   <button type="submit" class="btn btn-primary">Search</button>
-  <!-- show clear button only if there is a search query -->
   {% if query %}
     <a href="{% url 'users_list' %}" class="btn btn-secondary">Clear</a>
   {% endif %}
 </form>
 
-<!-- show search result count if searching -->
 {% if query %}
-  <p class="text-muted" style="margin-bottom:20px;">
+  <p class="text-muted" style="margin-bottom:20px; font-size:0.85rem;">
     {% with users|length as count %}
       {% if count > 0 %}
         {{ count }} result{{ count|pluralize }} for
@@ -43,39 +32,50 @@
         No results for
       {% endif %}
     {% endwith %}
-    "{{ query }}"
+    "<strong style="color:#1a1a1a;">{{ query }}</strong>"
   </p>
 {% endif %}
 
-<!-- users grid -->
+<!-- Users grid -->
 {% if users %}
-  <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(240px,1fr)); gap:16px;">
+  <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(220px,1fr)); gap:16px;">
 
     {% for u in users %}
-      <!-- skip current logged in user from the list -->
       {% if u != request.user %}
-        <a href="{% url 'user_profile' u.username %}" style="text-decoration:none;">
-          <div class="card" style="display:flex; flex-direction:column; align-items:center; text-align:center;">
+        <a href="{% url 'user_profile' u.username %}" style="text-decoration:none; color:inherit;">
+          <div class="card" style="display:flex; flex-direction:column;
+                                    align-items:center; text-align:center; padding:26px 20px;">
 
-            <!-- profile picture or placeholder letter -->
             {% if u.profile.profile_picture %}
-              <img src="{{ u.profile.profile_picture.url }}" class="avatar avatar-md" alt="{{ u.username }}" style="margin-bottom:14px;" />
+              <img src="{{ u.profile.profile_picture.url }}"
+                   class="avatar avatar-md" alt="{{ u.username }}"
+                   style="margin-bottom:14px;" />
             {% else %}
-              <div class="avatar-placeholder avatar-md" style="font-size:1.3rem; margin-bottom:14px;">
+              <div class="avatar-placeholder avatar-md"
+                   style="font-size:1.2rem; margin-bottom:14px;">
                 {{ u.username|first|upper }}
               </div>
             {% endif %}
 
-            <div style="font-weight:bold; color:#333;">{{ u.username }}</div>
+            <div style="font-weight:600; font-size:0.92rem; color:#1a1a1a;">
+              {{ u.username }}
+            </div>
 
-            <!-- bio or no bio message -->
             {% if u.profile.bio %}
-              <div class="text-muted" style="font-size:0.85rem; margin-top:8px; line-height:1.5;">{{ u.profile.bio|truncatechars:80 }}</div>
+              <div class="text-muted"
+                   style="font-size:0.82rem; margin-top:7px; line-height:1.5;">
+                {{ u.profile.bio|truncatechars:70 }}
+              </div>
             {% else %}
-              <div class="text-muted" style="font-size:0.85rem; margin-top:8px; font-style:italic;">No bio yet</div>
+              <div class="text-muted"
+                   style="font-size:0.82rem; margin-top:7px; font-style:italic;">
+                No bio yet
+              </div>
             {% endif %}
 
-            <div class="text-muted" style="font-size:0.78rem; margin-top:12px;">Joined {{ u.date_joined|date:"M Y" }}</div>
+            <div class="text-muted" style="font-size:0.76rem; margin-top:12px;">
+              Joined {{ u.date_joined|date:"M Y" }}
+            </div>
 
           </div>
         </a>
@@ -85,15 +85,12 @@
   </div>
 
 {% else %}
-  <!-- empty state - shown when no users found -->
-  <div class="card" style="text-align:center; padding:48px;">
+  <div class="card" style="text-align:center; padding:52px 24px;">
     {% if query %}
-      <!-- no search results -->
-      <div style="font-weight:bold; margin-bottom:8px;">No users found</div>
+      <div style="font-weight:600; font-size:0.95rem; margin-bottom:8px;">No users found</div>
       <div class="text-muted">Nothing matched "{{ query }}". Try something else.</div>
     {% else %}
-      <!-- no users at all -->
-      <div style="font-weight:bold; margin-bottom:8px;">No users yet</div>
+      <div style="font-weight:600; font-size:0.95rem; margin-bottom:8px;">No users yet</div>
       <div class="text-muted">Looks like you're the first one here!</div>
     {% endif %}
   </div>

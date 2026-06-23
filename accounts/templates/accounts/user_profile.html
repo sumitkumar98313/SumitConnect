@@ -3,65 +3,74 @@
 
 {% block content %}
 
-<!-- back to users list -->
-<a href="{% url 'users_list' %}" class="text-muted">Back to Users</a>
+<a href="{% url 'users_list' %}" class="text-muted"
+   style="display:inline-block; margin-bottom:20px; font-size:0.85rem;">
+  &larr; Back to Users
+</a>
 
-<!-- profile header card -->
-<div class="card" style="display:flex; align-items:center; gap:28px; margin-top:20px; margin-bottom:24px; flex-wrap:wrap;">
+<!-- Profile header -->
+<div class="card" style="display:flex; align-items:center; gap:28px;
+                          margin-bottom:20px; flex-wrap:wrap;">
 
-  <!-- profile picture or placeholder -->
   {% if viewed_user.profile.profile_picture %}
-    <img src="{{ viewed_user.profile.profile_picture.url }}" class="avatar avatar-lg" alt="{{ viewed_user.username }}" />
+    <img src="{{ viewed_user.profile.profile_picture.url }}"
+         class="avatar avatar-lg" alt="{{ viewed_user.username }}" />
   {% else %}
-    <div class="avatar-placeholder avatar-lg" style="font-size:2.5rem;">
+    <div class="avatar-placeholder avatar-lg" style="font-size:2.2rem;">
       {{ viewed_user.username|first|upper }}
     </div>
   {% endif %}
 
   <div style="flex:1;">
-    <h1 style="font-weight:bold; font-size:1.6rem;">{{ viewed_user.username }}</h1>
-    <div class="text-muted" style="margin-top:6px; margin-bottom:16px;">Joined {{ viewed_user.date_joined|date:"F Y" }}</div>
+    <h1 style="font-size:1.4rem; font-weight:700; margin-bottom:4px;">
+      {{ viewed_user.username }}
+    </h1>
+    <div class="text-muted" style="font-size:0.82rem; margin-bottom:16px;">
+      Joined {{ viewed_user.date_joined|date:"F Y" }}
+    </div>
 
-    <!-- followers, following, posts count -->
-    <div style="display:flex; gap:24px; margin-bottom:16px; flex-wrap:wrap;">
+    <!-- Stats -->
+    <div style="display:flex; gap:28px; margin-bottom:18px; flex-wrap:wrap;">
       <div>
-        <span style="font-weight:bold;">{{ followers_count }}</span>
-        <span class="text-muted" style="font-size:0.85rem; margin-left:4px;">Followers</span>
+        <span style="font-weight:700; font-size:1rem;">{{ followers_count }}</span>
+        <span class="text-muted" style="font-size:0.82rem; margin-left:4px;">Followers</span>
       </div>
       <div>
-        <span style="font-weight:bold;">{{ following_count }}</span>
-        <span class="text-muted" style="font-size:0.85rem; margin-left:4px;">Following</span>
+        <span style="font-weight:700; font-size:1rem;">{{ following_count }}</span>
+        <span class="text-muted" style="font-size:0.82rem; margin-left:4px;">Following</span>
       </div>
       <div>
-        <span style="font-weight:bold;">{{ user_posts|length }}</span>
-        <span class="text-muted" style="font-size:0.85rem; margin-left:4px;">Posts</span>
+        <span style="font-weight:700; font-size:1rem;">{{ user_posts|length }}</span>
+        <span class="text-muted" style="font-size:0.82rem; margin-left:4px;">Posts</span>
       </div>
     </div>
 
-    <!-- follow/unfollow button - only shown if viewing someone else's profile -->
     {% if viewed_user != request.user %}
       <form method="POST" action="{% url 'follow_user' viewed_user.username %}" style="margin:0;">
         {% csrf_token %}
-        <button type="submit" class="btn {% if is_following %}btn-secondary{% else %}btn-primary{% endif %}">
+        <button type="submit"
+                class="btn {% if is_following %}btn-secondary{% else %}btn-primary{% endif %}"
+                style="font-size:0.85rem; padding:8px 22px;">
           {% if is_following %}Unfollow{% else %}Follow{% endif %}
         </button>
       </form>
     {% else %}
-      <!-- if viewing own profile show edit button instead -->
-      <a href="{% url 'profile' %}" class="btn btn-secondary">Edit Profile</a>
+      <a href="{% url 'profile' %}" class="btn btn-secondary"
+         style="font-size:0.85rem; padding:8px 22px;">Edit Profile</a>
     {% endif %}
 
   </div>
 </div>
 
-<!-- about / bio section -->
-<div class="card" style="margin-bottom:24px;">
-  <h3 style="font-weight:bold; margin-bottom:12px;">About</h3>
-
+<!-- Bio -->
+<div class="card" style="margin-bottom:20px;">
+  <h3 style="font-size:0.95rem; font-weight:600; margin-bottom:12px; color:#1a1a1a;">About</h3>
   {% if viewed_user.profile.bio %}
-    <p style="line-height:1.6; color:#333;">{{ viewed_user.profile.bio }}</p>
+    <p style="line-height:1.7; color:#1a1a1a; font-size:0.92rem; margin:0;">
+      {{ viewed_user.profile.bio }}
+    </p>
   {% else %}
-    <p class="text-muted" style="font-style:italic;">
+    <p class="text-muted" style="font-style:italic; margin:0; font-size:0.9rem;">
       {% if viewed_user == request.user %}
         You haven't added a bio yet. <a href="{% url 'profile' %}">Add one</a>
       {% else %}
@@ -71,40 +80,50 @@
   {% endif %}
 </div>
 
-<h3 style="font-weight:bold; margin-bottom:16px;">Posts by {{ viewed_user.username }}</h3>
+<!-- Posts by user -->
+<h3 style="font-size:0.95rem; font-weight:600; margin-bottom:16px; color:#1a1a1a;">
+  Posts by {{ viewed_user.username }}
+</h3>
 
-<!-- loop through this user's posts -->
 {% if user_posts %}
   {% for post in user_posts %}
-    <div class="card" style="margin-bottom:16px;">
+    <div class="card" style="margin-bottom:14px;">
 
-      <!-- post author row -->
       <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
         {% if viewed_user.profile.profile_picture %}
-          <img src="{{ viewed_user.profile.profile_picture.url }}" class="avatar avatar-sm" alt="{{ viewed_user.username }}" />
+          <img src="{{ viewed_user.profile.profile_picture.url }}"
+               class="avatar avatar-sm" alt="{{ viewed_user.username }}" />
         {% else %}
-          <div class="avatar-placeholder avatar-sm" style="font-size:0.85rem;">{{ viewed_user.username|first|upper }}</div>
+          <div class="avatar-placeholder avatar-sm" style="font-size:0.85rem;">
+            {{ viewed_user.username|first|upper }}
+          </div>
         {% endif %}
         <div>
-          <div style="font-weight:bold; font-size:0.9rem;">{{ viewed_user.username }}</div>
-          <div class="text-muted" style="font-size:0.78rem;">{{ post.created_at|date:"d M Y, h:i A" }}</div>
+          <div style="font-weight:600; font-size:0.88rem; color:#1a1a1a;">
+            {{ viewed_user.username }}
+          </div>
+          <div class="text-muted" style="font-size:0.76rem;">
+            {{ post.created_at|date:"d M Y, h:i A" }}
+          </div>
         </div>
       </div>
 
-      <!-- post text -->
-      <p style="line-height:1.6; margin-bottom:12px;">{{ post.content }}</p>
+      <p style="line-height:1.65; font-size:0.92rem; margin-bottom:12px; color:#1a1a1a;">
+        {{ post.content }}
+      </p>
 
-      <!-- post image if it has one -->
       {% if post.image %}
-        <img src="{{ post.image.url }}" alt="post" style="width:100%; max-height:300px; object-fit:cover; border-radius:4px; margin-bottom:12px;" />
+        <img src="{{ post.image.url }}" alt="post"
+             style="width:100%; max-height:300px; object-fit:cover;
+                    border-radius:8px; margin-bottom:12px; border:1px solid #e0e0e0;" />
       {% endif %}
 
-      <!-- like count and view post link -->
-      <div style="display:flex; gap:16px; padding-top:10px; border-top:1px solid #ddd;">
-        <span class="text-muted" style="font-size:0.85rem;">
+      <div style="display:flex; gap:18px; padding-top:10px; border-top:1px solid #f0f0f0;">
+        <span class="text-muted" style="font-size:0.82rem;">
           Likes: {{ post.likes_count }}
         </span>
-        <a href="{% url 'post_detail' post.id %}" style="color:#777; font-size:0.85rem;">
+        <a href="{% url 'post_detail' post.id %}"
+           style="color:#888; font-size:0.82rem;">
           Comments: {{ post.comments_count }} — View post
         </a>
       </div>
@@ -113,9 +132,8 @@
   {% endfor %}
 
 {% else %}
-  <!-- no posts found -->
-  <div class="card" style="text-align:center; padding:32px;">
-    <div class="text-muted" style="font-style:italic;">
+  <div class="card" style="text-align:center; padding:36px;">
+    <div class="text-muted" style="font-style:italic; font-size:0.9rem;">
       {% if viewed_user == request.user %}
         You haven't posted anything yet. <a href="{% url 'feed' %}">Create your first post</a>
       {% else %}

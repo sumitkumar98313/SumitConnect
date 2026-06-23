@@ -6,104 +6,112 @@
 <h1 class="page-title">Dashboard</h1>
 <p class="page-subtitle">Welcome back, {{ user.username }}</p>
 
-<!-- profile card at top of dashboard -->
+<!-- Profile card -->
 <div class="card" style="display:flex; align-items:center; gap:24px; margin-bottom:24px; flex-wrap:wrap;">
 
-  <!-- show profile picture or first letter as placeholder -->
   {% if user.profile.profile_picture %}
-    <img src="{{ user.profile.profile_picture.url }}" class="avatar avatar-lg" alt="{{ user.username }}" />
+    <img src="{{ user.profile.profile_picture.url }}"
+         class="avatar avatar-lg" alt="{{ user.username }}" />
   {% else %}
-    <div class="avatar-placeholder avatar-lg" style="font-size:2.2rem;">
+    <div class="avatar-placeholder avatar-lg" style="font-size:2rem;">
       {{ user.username|first|upper }}
     </div>
   {% endif %}
 
   <div style="flex:1;">
-    <div style="font-weight:bold; font-size:1.3rem;">{{ user.username }}</div>
-
-    <!-- show bio if exists, otherwise show placeholder text -->
-    <div class="text-muted" style="margin-top:6px;">
+    <div style="font-weight:700; font-size:1.2rem; color:#1a1a1a;">{{ user.username }}</div>
+    <div class="text-muted" style="margin-top:5px; font-size:0.88rem;">
       {% if user.profile.bio %}
         {{ user.profile.bio }}
       {% else %}
         <em>No bio yet</em>
       {% endif %}
     </div>
-
-    <!-- action buttons -->
-    <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
-      <a href="{% url 'profile' %}" class="btn btn-secondary" style="font-size:0.85rem; padding:8px 16px;">Edit Profile</a>
-      <a href="{% url 'feed' %}" class="btn btn-primary" style="font-size:0.85rem; padding:8px 16px;">New Post</a>
+    <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+      <a href="{% url 'profile' %}" class="btn btn-secondary"
+         style="font-size:0.83rem; padding:7px 16px;">Edit Profile</a>
+      <a href="{% url 'feed' %}" class="btn btn-primary"
+         style="font-size:0.83rem; padding:7px 16px;">New Post</a>
     </div>
   </div>
 
-  <!-- member since date on the right -->
-  <div style="text-align:right;">
-    <div class="text-muted" style="font-size:0.8rem;">Member since</div>
-    <div style="font-weight:bold; margin-top:4px;">{{ user.date_joined|date:"M Y" }}</div>
+  <div style="text-align:right; flex-shrink:0;">
+    <div class="text-muted" style="font-size:0.78rem;">Member since</div>
+    <div style="font-weight:600; font-size:0.9rem; margin-top:4px;">
+      {{ user.date_joined|date:"M Y" }}
+    </div>
   </div>
 
 </div>
 
-<!-- stats cards - posts, followers, following -->
-<div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:16px; margin-bottom:32px;">
+<!-- Stats row -->
+<div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px,1fr));
+            gap:14px; margin-bottom:32px;">
 
-  <div class="card" style="text-align:center;">
-    <div style="font-size:1.8rem; font-weight:bold; color:#6a1b9a;">
+  <div class="card" style="text-align:center; padding:22px 16px;">
+    <div style="font-size:1.9rem; font-weight:700; color:#7C5CBF; line-height:1;">
       {{ my_posts_count|default:"0" }}
     </div>
-    <div class="text-muted" style="font-size:0.85rem; margin-top:4px;">Posts</div>
+    <div class="text-muted" style="font-size:0.82rem; margin-top:6px;">Posts</div>
   </div>
 
-  <div class="card" style="text-align:center;">
-    <div style="font-size:1.8rem; font-weight:bold; color:#6a1b9a;">
+  <div class="card" style="text-align:center; padding:22px 16px;">
+    <div style="font-size:1.9rem; font-weight:700; color:#7C5CBF; line-height:1;">
       {{ followers_count|default:"0" }}
     </div>
-    <div class="text-muted" style="font-size:0.85rem; margin-top:4px;">Followers</div>
+    <div class="text-muted" style="font-size:0.82rem; margin-top:6px;">Followers</div>
   </div>
 
-  <div class="card" style="text-align:center;">
-    <div style="font-size:1.8rem; font-weight:bold; color:#6a1b9a;">
+  <div class="card" style="text-align:center; padding:22px 16px;">
+    <div style="font-size:1.9rem; font-weight:700; color:#7C5CBF; line-height:1;">
       {{ following_count|default:"0" }}
     </div>
-    <div class="text-muted" style="font-size:0.85rem; margin-top:4px;">Following</div>
+    <div class="text-muted" style="font-size:0.82rem; margin-top:6px;">Following</div>
   </div>
 
 </div>
 
-<h2 style="font-weight:bold; margin-bottom:16px; font-size:1.1rem;">Recently Joined</h2>
+<!-- Recently joined -->
+<h2 style="font-size:1rem; font-weight:600; margin-bottom:16px; color:#1a1a1a;">
+  Recently Joined
+</h2>
 
-<!-- list of recently joined users -->
 {% if recent_users %}
   <div class="card" style="padding:0; overflow:hidden;">
     {% for u in recent_users %}
-      <div style="display:flex; align-items:center; gap:14px; padding:16px 24px; {% if not forloop.last %}border-bottom:1px solid #ddd;{% endif %}">
+      <div style="display:flex; align-items:center; gap:14px; padding:14px 22px;
+                  {% if not forloop.last %}border-bottom:1px solid #f0f0f0;{% endif %}">
 
-        <!-- avatar or placeholder -->
         {% if u.profile.profile_picture %}
-          <img src="{{ u.profile.profile_picture.url }}" class="avatar avatar-sm" alt="{{ u.username }}" />
+          <img src="{{ u.profile.profile_picture.url }}"
+               class="avatar avatar-sm" alt="{{ u.username }}" />
         {% else %}
-          <div class="avatar-placeholder avatar-sm" style="font-size:0.9rem;">{{ u.username|first|upper }}</div>
+          <div class="avatar-placeholder avatar-sm" style="font-size:0.85rem;">
+            {{ u.username|first|upper }}
+          </div>
         {% endif %}
 
         <div style="flex:1;">
-          <a href="{% url 'user_profile' u.username %}" style="color:#333; font-weight:500;">
+          <a href="{% url 'user_profile' u.username %}"
+             style="color:#1a1a1a; font-weight:600; font-size:0.88rem;">
             {{ u.username }}
           </a>
           {% if u.profile.bio %}
-            <div class="text-muted" style="font-size:0.82rem; margin-top:2px;">{{ u.profile.bio|truncatechars:60 }}</div>
+            <div class="text-muted" style="font-size:0.8rem; margin-top:2px;">
+              {{ u.profile.bio|truncatechars:60 }}
+            </div>
           {% endif %}
         </div>
 
-        <!-- join date on the right -->
-        <div class="text-muted" style="font-size:0.8rem;">{{ u.date_joined|date:"d M" }}</div>
+        <div class="text-muted" style="font-size:0.78rem; flex-shrink:0;">
+          {{ u.date_joined|date:"d M" }}
+        </div>
 
       </div>
     {% endfor %}
   </div>
 
 {% else %}
-  <!-- shown when no recent users found -->
   <div class="card" style="text-align:center; padding:40px 24px;">
     <div class="text-muted">No one has joined recently.</div>
   </div>

@@ -3,7 +3,7 @@
 
 {% block content %}
 
-<div style="max-width:420px; margin:0 auto;">
+<div style="max-width:400px; margin:0 auto;">
 
   <h1 class="page-title">Welcome back</h1>
   <p class="page-subtitle">Log in to your SumitConnect account</p>
@@ -14,31 +14,37 @@
 
       <div class="form-group">
         <label for="username">Username</label>
-        <input type="text" id="username" name="username" placeholder="Enter your username"
-               value="{{ request.POST.username }}" autocomplete="username" required autofocus />
+        <input type="text" id="username" name="username"
+               placeholder="Enter your username"
+               value="{{ request.POST.username }}"
+               autocomplete="username" required autofocus />
       </div>
 
       <div class="form-group">
         <label for="password">Password</label>
-        <!-- password field with show/hide toggle button -->
         <div style="position:relative;">
-          <input type="password" id="password" name="password" placeholder="Enter your password"
-                 autocomplete="current-password" required style="padding-right:50px;" />
-          <button type="button" id="togglePassword" aria-label="Toggle password visibility"
-                  style="position:absolute; right:10px; top:8px;
+          <input type="password" id="password" name="password"
+                 placeholder="Enter your password"
+                 autocomplete="current-password"
+                 required style="padding-right:54px;" />
+          <button type="button" id="togglePassword"
+                  style="position:absolute; right:12px; top:50%; transform:translateY(-50%);
                          background:none; border:none; cursor:pointer; font-size:0.8rem;
-                         color:#6a1b9a; padding:0;">Show</button>
+                         color:#7C5CBF; padding:0; font-family:'Poppins',sans-serif; font-weight:500;">
+            Show
+          </button>
         </div>
       </div>
 
-      <button type="submit" class="btn btn-primary" style="width:100%; margin-top:8px;">Login</button>
+      <button type="submit" class="btn btn-primary"
+              style="width:100%; margin-top:6px; padding:11px; font-size:0.92rem;">
+        Login
+      </button>
     </form>
   </div>
 
-  <!-- link to signup page -->
-  <p class="text-muted" style="text-align:center; margin-top:20px;">
-    Don't have an account?
-    <a href="{% url 'signup' %}">Sign up here</a>
+  <p class="text-muted" style="text-align:center; margin-top:18px;">
+    Don't have an account? <a href="{% url 'signup' %}">Sign up here</a>
   </p>
 
 </div>
@@ -47,14 +53,13 @@
   var toggleBtn = document.getElementById('togglePassword');
   var passwordInput = document.getElementById('password');
 
-  // toggle between showing and hiding password
   toggleBtn.addEventListener('click', function() {
     if (passwordInput.type === 'password') {
       passwordInput.type = 'text';
-      toggleBtn.textContent = 'Hide';
+      this.textContent = 'Hide';
     } else {
       passwordInput.type = 'password';
-      toggleBtn.textContent = 'Show';
+      this.textContent = 'Show';
     }
   });
 </script>

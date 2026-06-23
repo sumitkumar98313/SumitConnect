@@ -6,47 +6,48 @@
 <h1 class="page-title">Feed</h1>
 <p class="page-subtitle">See what everyone is sharing</p>
 
-<!-- create post form -->
+<!-- Create post form -->
 <div class="card" style="margin-bottom:24px;">
   <form method="POST" action="{% url 'create_post' %}" enctype="multipart/form-data" novalidate>
     {% csrf_token %}
 
-    <div class="form-group">
+    <div class="form-group" style="margin-bottom:10px;">
       <textarea name="content" id="postContent"
                 placeholder="What's on your mind, {{ request.user.username }}?"
-                style="min-height:80px; font-size:1rem;"
+                style="min-height:85px; font-size:0.93rem;"
                 required maxlength="500"></textarea>
-
-      <!-- character counter -->
-      <div style="text-align:right; font-size:0.8rem; color:#777; margin-top:4px;">
+      <div style="text-align:right; font-size:0.78rem; color:#aaa; margin-top:4px;">
         <span id="charCount">0</span>/500
       </div>
     </div>
 
-    <!-- image preview box - hidden until image is selected -->
-    <div id="imagePreviewBox" style="display:none; margin-bottom:12px;">
-      <img id="imagePreview" src="" alt="preview" style="max-width:100%; max-height:200px; border-radius:4px; object-fit:cover;" />
+    <!-- Image preview -->
+    <div id="imagePreviewBox" style="display:none; margin-bottom:14px;">
+      <img id="imagePreview" src="" alt="preview"
+           style="max-width:100%; max-height:220px; border-radius:8px; object-fit:cover;
+                  border:1px solid #e0e0e0;" />
     </div>
 
-    <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
-      <!-- file input for image upload -->
-      <input type="file" name="image" id="imageInput" accept="image/*" style="font-size:0.85rem;" />
+    <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+      <input type="file" name="image" id="imageInput" accept="image/*"
+             style="font-size:0.82rem; color:#777;" />
       <button type="submit" class="btn btn-primary">Post</button>
     </div>
 
   </form>
 </div>
 
-<!-- loop through all posts -->
+<!-- Posts list -->
 {% if posts %}
   {% for post in posts %}
-    <div class="card" style="margin-bottom:20px;">
+    <div class="card" style="margin-bottom:16px;">
 
-      <!-- post header - author info -->
-      <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+      <!-- Post header -->
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
 
         {% if post.author.profile.profile_picture %}
-          <img src="{{ post.author.profile.profile_picture.url }}" class="avatar avatar-sm" alt="{{ post.author.username }}" />
+          <img src="{{ post.author.profile.profile_picture.url }}"
+               class="avatar avatar-sm" alt="{{ post.author.username }}" />
         {% else %}
           <div class="avatar-placeholder avatar-sm" style="font-size:0.85rem;">
             {{ post.author.username|first|upper }}
@@ -54,17 +55,22 @@
         {% endif %}
 
         <div style="flex:1;">
-          <a href="{% url 'user_profile' post.author.username %}" style="color:#333; font-weight:bold;">
+          <a href="{% url 'user_profile' post.author.username %}"
+             style="color:#1a1a1a; font-weight:600; font-size:0.92rem;">
             {{ post.author.username }}
           </a>
-          <div class="text-muted" style="font-size:0.8rem;">{{ post.created_at|date:"d M Y, h:i A" }}</div>
+          <div class="text-muted" style="font-size:0.78rem; margin-top:1px;">
+            {{ post.created_at|date:"d M Y, h:i A" }}
+          </div>
         </div>
 
-        <!-- only show delete button if this is the logged in user's post -->
         {% if post.author == request.user %}
-          <form method="POST" action="{% url 'delete_post' post.id %}" onsubmit="return confirm('Delete this post?')" style="margin:0;">
+          <form method="POST" action="{% url 'delete_post' post.id %}"
+                onsubmit="return confirm('Delete this post?')" style="margin:0;">
             {% csrf_token %}
-            <button type="submit" style="background:none; border:none; color:#c0392b; font-size:0.85rem; cursor:pointer; padding:0;">
+            <button type="submit"
+                    style="background:none; border:none; color:#d63b3b; font-size:0.82rem;
+                           cursor:pointer; padding:0; font-family:'Poppins',sans-serif;">
               Delete
             </button>
           </form>
@@ -72,29 +78,37 @@
 
       </div>
 
-      <!-- post content text -->
-      <p style="line-height:1.6; margin-bottom:16px;">{{ post.content }}</p>
+      <!-- Post content -->
+      <p style="font-size:0.92rem; line-height:1.65; margin-bottom:14px; color:#1a1a1a;">
+        {{ post.content }}
+      </p>
 
-      <!-- post image if uploaded -->
+      <!-- Post image -->
       {% if post.image %}
-        <img src="{{ post.image.url }}" alt="post image" style="width:100%; max-height:400px; object-fit:cover; border-radius:4px; margin-bottom:16px;" />
+        <img src="{{ post.image.url }}" alt="post image"
+             style="width:100%; max-height:400px; object-fit:cover;
+                    border-radius:8px; margin-bottom:14px; border:1px solid #e0e0e0;" />
       {% endif %}
 
-      <!-- like and comment buttons -->
-      <div style="display:flex; align-items:center; gap:20px; padding-top:12px; border-top:1px solid #ddd;">
+      <!-- Post actions -->
+      <div style="display:flex; align-items:center; gap:20px;
+                  padding-top:12px; border-top:1px solid #f0f0f0;">
 
-        <!-- like form -->
         <form method="POST" action="{% url 'like_post' post.id %}" style="margin:0;">
           {% csrf_token %}
           <input type="hidden" name="next" value="feed" />
-          <button type="submit" style="background:none; border:none; cursor:pointer; font-size:0.9rem; padding:0; color:{% if post.liked_by_user %}#c0392b{% else %}#777{% endif %};">
+          <button type="submit"
+                  style="background:none; border:none; cursor:pointer;
+                         font-size:0.85rem; padding:0; font-family:'Poppins',sans-serif;
+                         font-weight:{% if post.liked_by_user %}600{% else %}400{% endif %};
+                         color:{% if post.liked_by_user %}#7C5CBF{% else %}#888{% endif %};">
             {% if post.liked_by_user %}Liked{% else %}Like{% endif %}
             ({{ post.likes_count }})
           </button>
         </form>
 
-        <!-- comment link - goes to post detail page -->
-        <a href="{% url 'post_detail' post.id %}" style="color:#777; font-size:0.9rem;">
+        <a href="{% url 'post_detail' post.id %}"
+           style="color:#888; font-size:0.85rem; font-weight:400;">
           Comments ({{ post.comments_count }})
         </a>
 
@@ -104,40 +118,29 @@
   {% endfor %}
 
 {% else %}
-  <!-- shown when there are no posts at all -->
-  <div class="card" style="text-align:center; padding:48px;">
-    <div style="font-weight:bold; margin-bottom:8px;">No posts yet</div>
+  <div class="card" style="text-align:center; padding:52px 24px;">
+    <div style="font-weight:600; font-size:0.95rem; margin-bottom:8px;">No posts yet</div>
     <div class="text-muted">Be the first one to post something!</div>
   </div>
 {% endif %}
 
 <script>
-  // character counter for post textarea
   var textarea = document.getElementById('postContent');
   var charCount = document.getElementById('charCount');
 
   textarea.addEventListener('input', function() {
     var len = this.value.length;
     charCount.textContent = len;
-
-    // turn red when getting close to limit
-    if (len >= 450) {
-      charCount.style.color = 'red';
-    } else {
-      charCount.style.color = '#777';
-    }
+    charCount.style.color = len >= 450 ? '#d63b3b' : '#aaa';
   });
 
-  // image preview when user selects a file
   var imageInput = document.getElementById('imageInput');
   var imagePreviewBox = document.getElementById('imagePreviewBox');
   var imagePreview = document.getElementById('imagePreview');
 
   imageInput.addEventListener('change', function() {
     var file = this.files[0];
-
     if (file) {
-      // read the file and show preview
       var reader = new FileReader();
       reader.onload = function(e) {
         imagePreview.src = e.target.result;
@@ -145,7 +148,6 @@
       };
       reader.readAsDataURL(file);
     } else {
-      // hide preview if no file selected
       imagePreviewBox.style.display = 'none';
       imagePreview.src = '';
     }

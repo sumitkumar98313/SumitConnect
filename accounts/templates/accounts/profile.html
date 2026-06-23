@@ -6,15 +6,12 @@
 <h1 class="page-title">Your Profile</h1>
 <p class="page-subtitle">Manage your account information</p>
 
-<!-- two column grid - left side info, right side edit form -->
 <style>
   .profile-grid {
     display: grid;
     grid-template-columns: 1fr 2fr;
-    gap: 24px;
+    gap: 20px;
   }
-
-  /* on mobile stack them vertically */
   @media (max-width: 640px) {
     .profile-grid { grid-template-columns: 1fr; }
   }
@@ -22,58 +19,74 @@
 
 <div class="profile-grid">
 
-  <!-- left card - profile picture and account actions -->
-  <div class="card" style="text-align:center;">
+  <!-- Left: avatar + account actions -->
+  <div class="card" style="text-align:center; padding:28px 20px;">
 
     {% if user.profile.profile_picture %}
-      <img src="{{ user.profile.profile_picture.url }}" class="avatar avatar-lg" alt="{{ user.username }}" style="margin-bottom:16px;" />
+      <img src="{{ user.profile.profile_picture.url }}"
+           class="avatar avatar-lg" alt="{{ user.username }}"
+           style="margin-bottom:16px;" />
     {% else %}
-      <!-- placeholder with first letter of username -->
-      <div class="avatar-placeholder avatar-lg" style="font-size:2.5rem; margin:0 auto 16px;">
+      <div class="avatar-placeholder avatar-lg"
+           style="font-size:2.2rem; margin:0 auto 16px;">
         {{ user.username|first|upper }}
       </div>
     {% endif %}
 
-    <div style="font-weight:bold; font-size:1.1rem;">{{ user.username }}</div>
-    <div class="text-muted" style="font-size:0.85rem; margin-top:6px;">Joined {{ user.date_joined|date:"F Y" }}</div>
+    <div style="font-weight:700; font-size:1rem; color:#1a1a1a;">{{ user.username }}</div>
+    <div class="text-muted" style="font-size:0.82rem; margin-top:5px;">
+      Joined {{ user.date_joined|date:"F Y" }}
+    </div>
 
-    <hr />
+    <hr style="margin:20px 0;" />
 
-    <!-- account action buttons -->
-    <a href="{% url 'change_password' %}" class="btn btn-secondary" style="width:100%; margin-bottom:10px; display:block; text-align:center;">Change Password</a>
-    <a href="{% url 'delete_account' %}" class="btn btn-danger" style="width:100%; display:block; text-align:center;">Delete Account</a>
+    <a href="{% url 'change_password' %}" class="btn btn-secondary"
+       style="width:100%; margin-bottom:10px; display:block; text-align:center;
+              font-size:0.85rem;">
+      Change Password
+    </a>
+    <a href="{% url 'delete_account' %}" class="btn btn-danger"
+       style="width:100%; display:block; text-align:center; font-size:0.85rem;">
+      Delete Account
+    </a>
 
   </div>
 
-  <!-- right card - edit profile form -->
+  <!-- Right: edit form -->
   <div class="card">
-    <h3 style="font-weight:bold; margin-bottom:24px;">Edit Profile</h3>
+    <h3 style="font-size:1rem; font-weight:600; margin-bottom:22px; color:#1a1a1a;">
+      Edit Profile
+    </h3>
 
     <form method="POST" enctype="multipart/form-data" novalidate>
       {% csrf_token %}
 
       <div class="form-group">
         <label for="bio">Bio</label>
-        <textarea id="bio" name="bio" placeholder="Tell others about yourself..." maxlength="200">{{ user.profile.bio }}</textarea>
-        <!-- bio character counter -->
-        <div style="text-align:right; font-size:0.8rem; color:#777; margin-top:4px;">
+        <textarea id="bio" name="bio"
+                  placeholder="Tell others about yourself..."
+                  maxlength="200">{{ user.profile.bio }}</textarea>
+        <div style="text-align:right; font-size:0.78rem; color:#aaa; margin-top:4px;">
           <span id="bioCharCount">{{ user.profile.bio|length }}</span>/200
         </div>
       </div>
 
       <div class="form-group">
         <label for="profile_picture">Profile Picture</label>
-        <input type="file" id="profile_picture" name="profile_picture" accept="image/*" style="padding:10px 0;" />
+        <input type="file" id="profile_picture" name="profile_picture"
+               accept="image/*" style="padding:8px 0; font-size:0.85rem;" />
 
-        <!-- show this message if user already has a picture -->
         {% if user.profile.profile_picture %}
-          <div class="text-muted" style="font-size:0.8rem; margin-top:6px;">Current photo will be replaced if you select a new one</div>
+          <div class="text-muted" style="font-size:0.78rem; margin-top:6px;">
+            Current photo will be replaced if you select a new one
+          </div>
         {% endif %}
 
-        <!-- image preview box - hidden until file is selected -->
-        <div id="previewBox" style="display:none; margin-top:12px;">
-          <div class="text-muted" style="font-size:0.8rem; margin-bottom:6px;">Preview:</div>
-          <img id="imagePreview" src="" alt="preview" style="width:80px; height:80px; border-radius:50%; object-fit:cover; border:1px solid #ccc;" />
+        <div id="previewBox" style="display:none; margin-top:14px;">
+          <div class="text-muted" style="font-size:0.78rem; margin-bottom:6px;">Preview:</div>
+          <img id="imagePreview" src="" alt="preview"
+               style="width:72px; height:72px; border-radius:50%;
+                      object-fit:cover; border:2px solid #e0e0e0;" />
         </div>
       </div>
 
@@ -84,32 +97,22 @@
 </div>
 
 <script>
-  // bio character counter
   var bioTextarea = document.getElementById('bio');
   var bioCharCount = document.getElementById('bioCharCount');
 
   bioTextarea.addEventListener('input', function() {
     var len = this.value.length;
     bioCharCount.textContent = len;
-
-    // turn red when close to limit
-    if (len >= 180) {
-      bioCharCount.style.color = 'red';
-    } else {
-      bioCharCount.style.color = '#777';
-    }
+    bioCharCount.style.color = len >= 180 ? '#d63b3b' : '#aaa';
   });
 
-  // profile picture preview
   var picInput = document.getElementById('profile_picture');
   var previewBox = document.getElementById('previewBox');
   var previewImg = document.getElementById('imagePreview');
 
   picInput.addEventListener('change', function() {
     var file = this.files[0];
-
     if (file) {
-      // read and show the selected image as preview
       var reader = new FileReader();
       reader.onload = function(e) {
         previewImg.src = e.target.result;
@@ -117,7 +120,6 @@
       };
       reader.readAsDataURL(file);
     } else {
-      // hide preview if no file selected
       previewBox.style.display = 'none';
       previewImg.src = '';
     }

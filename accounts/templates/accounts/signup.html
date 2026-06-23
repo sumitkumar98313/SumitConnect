@@ -3,7 +3,7 @@
 
 {% block content %}
 
-<div style="max-width:420px; margin:0 auto;">
+<div style="max-width:400px; margin:0 auto;">
 
   <h1 class="page-title">Create Account</h1>
   <p class="page-subtitle">Join the SumitConnect community</p>
@@ -14,49 +14,57 @@
 
       <div class="form-group">
         <label for="username">Username</label>
-        <input type="text" id="username" name="username" placeholder="Letters, numbers, underscores only"
-               value="{{ request.POST.username }}" autocomplete="username" required autofocus />
-        <div style="font-size:0.8rem; color:#777; margin-top:5px;">Only letters, numbers and underscores. No spaces.</div>
+        <input type="text" id="username" name="username"
+               placeholder="Letters, numbers, underscores only"
+               value="{{ request.POST.username }}"
+               autocomplete="username" required autofocus />
+        <div style="font-size:0.78rem; color:#aaa; margin-top:5px;">
+          Only letters, numbers and underscores. No spaces.
+        </div>
       </div>
 
       <div class="form-group">
         <label for="password">Password</label>
-        <!-- password field with show/hide button -->
         <div style="position:relative;">
-          <input type="password" id="password" name="password" placeholder="Min. 6 characters"
-                 autocomplete="new-password" minlength="6" required style="padding-right:50px;" />
-          <button type="button" id="togglePassword" aria-label="Toggle password visibility"
-                  style="position:absolute; right:10px; top:8px;
+          <input type="password" id="password" name="password"
+                 placeholder="Min. 6 characters"
+                 autocomplete="new-password"
+                 minlength="6" required style="padding-right:54px;" />
+          <button type="button" id="togglePassword"
+                  style="position:absolute; right:12px; top:50%; transform:translateY(-50%);
                          background:none; border:none; cursor:pointer; font-size:0.8rem;
-                         color:#6a1b9a; padding:0;">Show</button>
+                         color:#7C5CBF; padding:0; font-family:'Poppins',sans-serif; font-weight:500;">
+            Show
+          </button>
         </div>
       </div>
 
       <div class="form-group">
         <label for="confirm_password">Confirm Password</label>
-        <!-- confirm password with its own toggle -->
         <div style="position:relative;">
-          <input type="password" id="confirm_password" name="confirm_password" placeholder="Repeat your password"
-                 autocomplete="new-password" required style="padding-right:50px;" />
-          <button type="button" id="toggleConfirm" aria-label="Toggle confirm password visibility"
-                  style="position:absolute; right:10px; top:8px;
+          <input type="password" id="confirm_password" name="confirm_password"
+                 placeholder="Repeat your password"
+                 autocomplete="new-password"
+                 required style="padding-right:54px;" />
+          <button type="button" id="toggleConfirm"
+                  style="position:absolute; right:12px; top:50%; transform:translateY(-50%);
                          background:none; border:none; cursor:pointer; font-size:0.8rem;
-                         color:#6a1b9a; padding:0;">Show</button>
+                         color:#7C5CBF; padding:0; font-family:'Poppins',sans-serif; font-weight:500;">
+            Show
+          </button>
         </div>
-        <!-- match message shown here by JS -->
-        <div id="matchMsg" style="font-size:0.8rem; margin-top:5px; display:none;"></div>
+        <div id="matchMsg" style="font-size:0.8rem; margin-top:6px; display:none;"></div>
       </div>
 
-      <button type="submit" id="submitBtn" class="btn btn-primary" style="width:100%; margin-top:12px; padding:10px; font-size:1rem;">
+      <button type="submit" id="submitBtn" class="btn btn-primary"
+              style="width:100%; margin-top:6px; padding:11px; font-size:0.92rem;">
         Create Account
       </button>
     </form>
   </div>
 
-  <!-- link to login page -->
-  <p class="text-muted" style="text-align:center; margin-top:20px;">
-    Already have an account?
-    <a href="{% url 'login' %}">Login here</a>
+  <p class="text-muted" style="text-align:center; margin-top:18px;">
+    Already have an account? <a href="{% url 'login' %}">Login here</a>
   </p>
 
 </div>
@@ -66,12 +74,9 @@
   var confirmInput = document.getElementById('confirm_password');
   var matchMsg = document.getElementById('matchMsg');
 
-  // reusable function to toggle password visibility
-  // i used a function so i don't have to write same code twice
   function makeToggle(btnId, inputId) {
     var btn = document.getElementById(btnId);
     var input = document.getElementById(inputId);
-
     btn.addEventListener('click', function() {
       if (input.type === 'password') {
         input.type = 'text';
@@ -83,39 +88,33 @@
     });
   }
 
-  // attach toggle to both password fields
   makeToggle('togglePassword', 'password');
   makeToggle('toggleConfirm', 'confirm_password');
 
-  // check if both passwords match and show message
   function checkMatch() {
     if (confirmInput.value.length === 0) {
       matchMsg.style.display = 'none';
       return;
     }
-
     matchMsg.style.display = 'block';
-
     if (passwordInput.value === confirmInput.value) {
       matchMsg.textContent = 'Passwords match';
-      matchMsg.style.color = 'green';
+      matchMsg.style.color = '#2a5e0e';
     } else {
       matchMsg.textContent = 'Passwords do not match';
-      matchMsg.style.color = 'red';
+      matchMsg.style.color = '#7a1f1f';
     }
   }
 
-  // run checkMatch whenever user types in either field
   passwordInput.addEventListener('input', checkMatch);
   confirmInput.addEventListener('input', checkMatch);
 
-  // also check on form submit - don't allow if passwords don't match
   document.getElementById('signupForm').addEventListener('submit', function(e) {
     if (passwordInput.value !== confirmInput.value) {
-      e.preventDefault(); // stop form submitting
+      e.preventDefault();
       matchMsg.style.display = 'block';
       matchMsg.textContent = 'Passwords do not match';
-      matchMsg.style.color = 'red';
+      matchMsg.style.color = '#7a1f1f';
       confirmInput.focus();
     }
   });

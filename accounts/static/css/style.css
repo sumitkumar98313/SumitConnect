@@ -3,69 +3,31 @@
    by Sumit Kumar | github.com/sumitkumar98313
    ============================================= */
 
-/* ── Global ── */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f2f2f2;
-    min-height: 100vh;
+/* ── Google Font is loaded in base.html <head>
+   @import kept here as fallback for any standalone use ── */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+/* ── Reset ── */
+*, *::before, *::after {
+    box-sizing: border-box;
     margin: 0;
-    color: #333;
+    padding: 0;
 }
 
-/* ── Navbar ── */
-.navbar {
-    background-color: #6a1b9a;
-    color: white;
-    padding: 15px;
+/* ── Base ── */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #e8e8e8;
+    color: #1a1a1a;
+    min-height: 100vh;
+    line-height: 1.6;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-/* ── Nav Links ── */
-.nav-links a {
-    color: white;
-    margin-left: 20px;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.nav-links a:hover {
-    text-decoration: underline;
-}
-
-/* ── Container ── */
-.container {
-    width: 80%;
-    margin: auto;
-    margin-top: 40px;
-    text-align: center;
-}
-
-/* ── Card ── */
-.card {
-    background-color: white;
-    padding: 20px;
-    border-radius: 6px;
-    width: 300px;
-    margin: auto;
-    border: 1px solid #ddd;
-    color: #333;
-}
-
-/* ── Headings ── */
-h1, h2, h3, h4, h5, h6 {
-    color: #333;
-}
-
-/* ── Paragraphs & Labels ── */
-p, label, span {
-    color: #555;
+    flex-direction: column;
 }
 
 /* ── Links ── */
 a {
-    color: #6a1b9a;
+    color: #7C5CBF;
     text-decoration: none;
 }
 
@@ -73,53 +35,440 @@ a:hover {
     text-decoration: underline;
 }
 
-/* ── Buttons ── */
-button, .btn, input[type="submit"] {
-    background-color: #6a1b9a;
-    color: #ffffff;
-    border: none;
-    padding: 8px 18px;
-    border-radius: 4px;
+/* ── Navbar ── */
+nav {
+    background-color: #ffffff;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #e0e0e0;
+    height: 58px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-brand {
+    color: #7C5CBF;
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.nav-links a {
+    color: #444;
+    font-size: 0.88rem;
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: background 0.15s, color 0.15s;
+}
+
+.nav-links a:hover {
+    background-color: #ede9f7;
+    color: #7C5CBF;
+    text-decoration: none;
+}
+
+.nav-links a.active {
+    color: #7C5CBF;
+    font-weight: 600;
+    background-color: #f0ecf9;
+}
+
+.nav-links form {
+    margin: 0;
+}
+
+.nav-links form button {
+    background: none;
+    border: 1px solid #e0e0e0;
+    color: #444;
+    padding: 5px 14px;
+    border-radius: 6px;
     cursor: pointer;
-    font-weight: bold;
-    font-size: 14px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
+    transition: border-color 0.15s, color 0.15s;
 }
 
-button:hover, .btn:hover, input[type="submit"]:hover {
-    background-color: #4a148c;
+.nav-links form button:hover {
+    border-color: #7C5CBF;
+    color: #7C5CBF;
 }
 
-/* ── Inputs ── */
+/* ── Page wrapper ── */
+.page-wrapper {
+    max-width: 1000px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 36px 24px;
+    flex: 1;
+}
+
+/* ── Flash messages ── */
+.messages {
+    list-style: none;
+    margin-bottom: 24px;
+}
+
+.messages li {
+    padding: 11px 16px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    font-size: 0.88rem;
+    font-weight: 500;
+}
+
+.messages .success {
+    background-color: #edf7e6;
+    color: #2a5e0e;
+    border: 1px solid #b8dfa0;
+}
+
+.messages .error {
+    background-color: #fdf0f0;
+    color: #7a1f1f;
+    border: 1px solid #f5c0c0;
+}
+
+.messages .info {
+    background-color: #eeecfe;
+    color: #3c3489;
+    border: 1px solid #cccaf5;
+}
+
+/* ── Card ── */
+.card {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 20px;
+    transition: box-shadow 0.18s ease;
+}
+
+.card:hover {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+}
+
+/* ── Typography ── */
+.page-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 6px;
+    letter-spacing: -0.3px;
+}
+
+.page-subtitle {
+    color: #777;
+    font-size: 0.92rem;
+    margin-bottom: 28px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #1a1a1a;
+    font-weight: 700;
+}
+
+p, span {
+    color: #1a1a1a;
+}
+
+/* ── Forms ── */
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label,
+label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select,
 input[type="text"],
 input[type="email"],
 input[type="password"],
 textarea,
 select {
-    background-color: white;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    color: #333;
-    padding: 8px 10px;
     width: 100%;
+    padding: 10px 13px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    color: #1a1a1a;
+    background-color: #ffffff;
+    transition: border-color 0.15s;
     box-sizing: border-box;
-    font-size: 14px;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus,
+input:focus,
+textarea:focus,
+select:focus {
     outline: none;
+    border-color: #7C5CBF;
 }
 
-input:focus, textarea:focus, select:focus {
-    border-color: #6a1b9a;
+input::placeholder,
+textarea::placeholder {
+    color: #aaa;
 }
 
-input::placeholder, textarea::placeholder {
-    color: #999;
+.form-group textarea,
+textarea {
+    resize: vertical;
+    min-height: 90px;
+}
+
+/* ── Buttons ── */
+.btn,
+button,
+input[type="submit"] {
+    display: inline-block;
+    padding: 9px 22px;
+    border-radius: 6px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    font-family: 'Poppins', sans-serif;
+    transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+    line-height: 1.4;
+}
+
+.btn-primary,
+button[type="submit"],
+input[type="submit"] {
+    background-color: #7C5CBF;
+    color: #ffffff;
+}
+
+.btn-primary:hover,
+button[type="submit"]:hover,
+input[type="submit"]:hover {
+    background-color: #6347a3;
+    text-decoration: none;
+    color: #ffffff;
+}
+
+.btn-secondary {
+    background-color: #ffffff;
+    color: #1a1a1a;
+    border: 1px solid #e0e0e0;
+}
+
+.btn-secondary:hover {
+    border-color: #7C5CBF;
+    color: #7C5CBF;
+    background-color: #faf9fe;
+    text-decoration: none;
+}
+
+.btn-danger {
+    background-color: #d63b3b;
+    color: #ffffff;
+}
+
+.btn-danger:hover {
+    background-color: #b02e2e;
+    text-decoration: none;
+    color: #ffffff;
+}
+
+/* ── Avatar ── */
+.avatar {
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e0e0e0;
+    flex-shrink: 0;
+}
+
+.avatar-lg { width: 80px; height: 80px; }
+.avatar-md { width: 48px; height: 48px; }
+.avatar-sm { width: 36px; height: 36px; }
+
+.avatar-placeholder {
+    border-radius: 50%;
+    background-color: #eeecfe;
+    border: 2px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: #7C5CBF;
+    flex-shrink: 0;
+}
+
+/* ── Post header row ── */
+.post-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.post-meta .username {
+    font-weight: 600;
+    font-size: 0.92rem;
+    color: #1a1a1a;
+}
+
+.post-meta .timestamp {
+    font-size: 0.78rem;
+    color: #888;
+    margin-top: 1px;
+}
+
+/* ── Post actions ── */
+.post-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding-top: 12px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.post-actions a,
+.post-actions button {
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 0.85rem;
+    font-weight: 400;
+    padding: 0;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    transition: color 0.15s;
+}
+
+.post-actions a:hover,
+.post-actions button:hover {
+    color: #7C5CBF;
+    text-decoration: none;
+}
+
+.post-actions .liked {
+    color: #7C5CBF;
+    font-weight: 600;
+}
+
+/* ── Divider ── */
+hr {
+    border: none;
+    border-top: 1px solid #e0e0e0;
+    margin: 20px 0;
+}
+
+.divider {
+    border: none;
+    border-top: 1px solid #e0e0e0;
+    margin: 16px 0;
+}
+
+/* ── Utility ── */
+.text-muted {
+    color: #888;
+    font-size: 0.85rem;
+}
+
+.text-accent {
+    color: #7C5CBF;
 }
 
 /* ── Footer ── */
 footer {
-    background-color: #333;
-    color: #ccc;
+    background-color: #ffffff;
+    border-top: 1px solid #e0e0e0;
+    padding: 24px 32px;
+    margin-top: auto;
+}
+
+.footer-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.footer-brand {
+    color: #7C5CBF;
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+.footer-links {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.footer-links a {
+    color: #888;
+    font-size: 0.82rem;
+    font-weight: 500;
+}
+
+.footer-links a:hover {
+    color: #7C5CBF;
+    text-decoration: none;
+}
+
+.footer-copy {
+    color: #aaa;
+    font-size: 0.78rem;
+    width: 100%;
     text-align: center;
-    padding: 16px;
-    font-size: 13px;
-    margin-top: 60px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid #e0e0e0;
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+    nav {
+        padding: 0 16px;
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+    .page-wrapper {
+        padding: 24px 16px;
+    }
+
+    .page-title {
+        font-size: 1.35rem;
+    }
+
+    .footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    footer {
+        padding: 20px 16px;
+    }
 }
